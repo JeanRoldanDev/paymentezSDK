@@ -86,20 +86,20 @@ class CardPay {
     }
   }
 
-  // Map<String, dynamic> toJson() => {
-  //       'bin': bin,
-  //       'status': status,
-  //       'token': token,
-  //       'expiry_year': expiryYear,
-  //       'expiry_month': expiryMonth,
-  //       'transaction_reference': transactionReference,
-  //       'type': type,
-  //       'number': number,
-  //       // 'origin': origin,
-  //       // 'nameCard': nameCard,
-  //       // 'cardNumFormated': cardNumFormated,
-  //       // 'iconCard': iconCard
-  //     };
+  Map<String, dynamic> toJson() => {
+        'bin': bin,
+        'status': status,
+        'token': token,
+        'expiry_year': expiryYear,
+        'expiry_month': expiryMonth,
+        'transaction_reference': transactionReference,
+        'type': type,
+        'number': number,
+        // 'origin': origin,
+        // 'nameCard': nameCard,
+        // 'cardNumFormated': cardNumFormated,
+        // 'iconCard': iconCard
+      };
 }
 
 class CardInfo {

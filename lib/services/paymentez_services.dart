@@ -196,6 +196,52 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
     }
   }
 
+  @override
+  Future<PaymentezResp> debitToken({UserPay user, CardPay card, OrderPay orderPay}) async {
+    try {
+      String tokenAuth = PaymentezSecurity.getAuthToken(
+        configAuthorization.appCodeSERVER,
+        configAuthorization.appClientKeySERVER,
+      );
+      final dat = {
+        "card": {"token": card.token},
+        "user": {"id": user.id, "email": user.email},
+        "order": {
+          "amount": orderPay.amount,
+          "description": orderPay.description,
+          "dev_reference": orderPay.devReference,
+          "vat": orderPay.vat,
+          orderPay.installments == null ? "" : "installments": orderPay.installments,
+          orderPay.installmentsType == null ? "" : "installments_type": orderPay.installmentsType,
+          orderPay.taxableAmount == null ? "" : "taxable_amount": orderPay.taxableAmount,
+          "tax_percentage": orderPay.taxPercentage
+        },
+      };
+      final response = await http.post(
+        configAuthorization.getHost() + "/v2/transaction/debit/",
+        headers: {'Auth-Token': tokenAuth.toString()},
+        body: json.encode(dat),
+      );
+      print('************************************************> DebitToken');
+      print(response.statusCode);
+      print(response.body);
+      return _prepareReturn(
+        response: response,
+        userId: user.id,
+        nameFunction: 'DebitToken',
+      );
+    } catch (e) {
+      if (configAuthorization.isLogServe) {
+        _log(user.id, 'DebitToken', 500, e.toString());
+      }
+      return PaymentezResp(
+        status: StatusResp.internalServerError,
+        message: 'Servicio no disponible, inténtelo más tarde',
+        data: null,
+      );
+    }
+  }
+
   //=================================================
   PaymentezResp _prepareReturn({@required http.Response response, @required String userId, @required String nameFunction}) {
     if (response.statusCode == 200) {

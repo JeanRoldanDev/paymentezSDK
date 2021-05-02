@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:paymentez/models/orderPay.dart';
 import 'package:paymentez/models/paymentez_resp.dart';
 import 'package:paymentez/models/userPay.dart';
 import 'package:paymentez/repository/paymentez_repository_interface.dart';
@@ -63,6 +64,14 @@ class Paymentez {
       type: type,
       value: value,
       moreInfo: moreInfo,
+    );
+  }
+
+  Future<PaymentezResp> debitToken(UserPay user, CardPay card, OrderPay orderPay) async {
+    return await _paymentezRepositoryInterface.debitToken(
+      user: user,
+      card: card,
+      orderPay: orderPay,
     );
   }
 }
