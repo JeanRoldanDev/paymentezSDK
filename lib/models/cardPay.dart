@@ -14,6 +14,7 @@ class CardPay {
   String transactionReference;
   String type;
   String number;
+  String origin;
 
   /// propertys View
   CardInfo cardInfo;
@@ -33,6 +34,7 @@ class CardPay {
     this.transactionReference,
     this.type,
     this.number,
+    this.origin,
     this.cardInfo,
     this.cvc,
     this.statusEs,
@@ -48,6 +50,7 @@ class CardPay {
     transactionReference = dat['transaction_reference'];
     type = dat['type'];
     number = dat['number'].toString();
+    origin = dat['origin'];
     cardInfo = CardInfo.toModel(dat);
     cvc = '';
     statusEs = getStatusEs(dat['status'].toString());
@@ -95,10 +98,11 @@ class CardPay {
         'transaction_reference': transactionReference,
         'type': type,
         'number': number,
-        // 'origin': origin,
-        // 'nameCard': nameCard,
-        // 'cardNumFormated': cardNumFormated,
-        // 'iconCard': iconCard
+        'origin': origin,
+        'cardInfo': cardInfo.toJson(),
+        'cvc': cvc,
+        'statusEs': statusEs,
+        'message': message,
       };
 }
 
@@ -132,4 +136,15 @@ class CardInfo {
     color = PaymentezValidate.getColorCard(dat['type'].toString());
     numCardFormated = PaymentezValidate.getNumCardFormated(dat['type'].toString(), dat['bin'].toString(), dat['number'].toString());
   }
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'typeCard': typeCard.toString(),
+        'fullName': fullName,
+        'spacingPatterns': spacingPatterns,
+        'cvvLength': cvvLength,
+        'icon': icon,
+        'color': color.toString(),
+        'numCardFormated': numCardFormated,
+      };
 }
