@@ -13,13 +13,9 @@ import 'package:http/http.dart' as http;
 import 'package:paymentez/models/cardPay.dart';
 part 'services/paymentez_services.dart';
 
-/// A Calculator.
 class Paymentez {
-  // static ConfigAuthorization _configAuth;
-  // Paymentez({this.configAuthorization});
-
   Paymentez._();
-  static Paymentez _instance = Paymentez._();
+  static final _instance = Paymentez._();
   static PaymentezRepositoryInterface _paymentezRepositoryInterface;
 
   static Paymentez instance({ConfigAuthorization configAuthorization}) {
@@ -50,14 +46,16 @@ class Paymentez {
     );
   }
 
-  Future<PaymentezResp> infoTransaction(String userId, String transactionId) async {
+  Future<PaymentezResp> infoTransaction(
+      String userId, String transactionId) async {
     return await _paymentezRepositoryInterface.infoTransaction(
       userId: userId,
       transactionId: transactionId,
     );
   }
 
-  Future<PaymentezResp> verify(String userId, String transactionId, String type, String value, bool moreInfo) async {
+  Future<PaymentezResp> verify(String userId, String transactionId, String type,
+      String value, bool moreInfo) async {
     return await _paymentezRepositoryInterface.verify(
       userId: userId,
       transactionId: transactionId,
@@ -67,7 +65,8 @@ class Paymentez {
     );
   }
 
-  Future<PaymentezResp> debitToken(UserPay user, CardPay card, OrderPay orderPay) async {
+  Future<PaymentezResp> debitToken(
+      UserPay user, CardPay card, OrderPay orderPay) async {
     return await _paymentezRepositoryInterface.debitToken(
       user: user,
       card: card,
@@ -98,6 +97,8 @@ class ConfigAuthorization {
   final Map<String, String> headers;
 
   String getHost() {
-    return production ? "https://ccapi.paymentez.com" : "https://ccapi-stg.paymentez.com";
+    return production
+        ? 'https://ccapi.paymentez.com'
+        : 'https://ccapi-stg.paymentez.com';
   }
 }

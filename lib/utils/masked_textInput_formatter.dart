@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MaskedTextInputFormatter extends TextInputFormatter {
-  final String mask;
-  final String separator;
-
   MaskedTextInputFormatter({
     @required this.mask,
     @required this.separator,
@@ -12,15 +9,20 @@ class MaskedTextInputFormatter extends TextInputFormatter {
     assert(mask != null);
     assert(separator != null);
   }
+  final String mask;
+  final String separator;
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.length > 0) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isNotEmpty) {
       if (newValue.text.length > oldValue.text.length) {
         if (newValue.text.length > mask.length) return oldValue;
-        if (newValue.text.length < mask.length && mask[newValue.text.length - 1] == separator) {
+        if (newValue.text.length < mask.length &&
+            mask[newValue.text.length - 1] == separator) {
           return TextEditingValue(
-            text: '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
+            text:
+                '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
             selection: TextSelection.collapsed(
               offset: newValue.selection.end + 1,
             ),
@@ -31,9 +33,10 @@ class MaskedTextInputFormatter extends TextInputFormatter {
     return newValue;
   }
 
-  static String applyFormat(String value, {@required String mask, @required String separator, bool force = false}) {
-    String val = "";
-    String newMask = mask;
+  static String applyFormat(String value,
+      {@required String mask, @required String separator, bool force = false}) {
+    var val = '';
+    var newMask = mask;
     for (var i = 0; i < value.length; i++) {
       if (i < newMask.length) {
         if (newMask[i].toString() == separator.toString()) {
@@ -56,7 +59,8 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 
 class UpperCaseTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
       text: newValue.text?.toUpperCase(),
       selection: newValue.selection,

@@ -1,31 +1,49 @@
 import 'package:paymentez/utils/paymentez_validate.dart';
 
 class Transaction {
-  String status;
-  String paymentDate;
-  double amount;
-  String authorizationCode;
-  int installments;
-  String devReference;
-  int statusDetail;
-  String carrierCode;
-  String message;
-  String id;
-  String statusDetailDescription;
+  Transaction({
+    this.status,
+    this.paymentDate,
+    this.amount,
+    this.authorizationCode,
+    this.installments,
+    this.devReference,
+    this.statusDetail,
+    this.carrierCode,
+    this.message,
+    this.id,
+    this.statusDetailDescription,
+  });
 
-  Transaction.fromJson(dynamic dat) {
-    status = dat['status'];
-    paymentDate = dat['payment_date'];
-    amount = double.parse(dat['amount'].toString());
-    authorizationCode = dat['authorization_code'];
-    installments = int.parse(dat['installments'].toString());
-    devReference = dat['dev_reference'];
-    statusDetail = int.parse(dat['status_detail'].toString());
-    carrierCode = dat['carrier_code'];
-    message = dat['message'];
-    id = dat['id'];
-    statusDetailDescription = PaymentezValidate.geStatusDetailDescription(int.parse(dat['status_detail'].toString()));
+  factory Transaction.fromJson(dynamic dat) {
+    return Transaction(
+      status: dat['status'],
+      paymentDate: dat['payment_date'],
+      amount: double.parse(dat['amount'].toString()),
+      authorizationCode: dat['authorization_code'],
+      installments: int.parse(dat['installments'].toString()),
+      devReference: dat['dev_reference'],
+      statusDetail: int.parse(dat['status_detail'].toString()),
+      carrierCode: dat['carrier_code'],
+      message: dat['message'],
+      id: dat['id'],
+      statusDetailDescription: PaymentezValidate.geStatusDetailDescription(
+        int.parse(dat['status_detail'].toString()),
+      ),
+    );
   }
+
+  final String status;
+  final String paymentDate;
+  final double amount;
+  final String authorizationCode;
+  final int installments;
+  final String devReference;
+  final int statusDetail;
+  final String carrierCode;
+  final String message;
+  final String id;
+  final String statusDetailDescription;
 
   Map<String, dynamic> toJson() => {
         'status': status,
