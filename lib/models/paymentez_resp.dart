@@ -199,10 +199,10 @@ class _StatusRespPaymentez {
   }
 
   /// HTTP CODE 200: success
-  static const int valid = 20001;
+  // static const int valid = 20001;
 
   /// HTTP CODE 404: not_found
-  static const int notFound = 40401;
+  // static const int notFound = 40401;
 
   /// HTTP CODE 400: conflict
   static const int validationError = 40001;
@@ -219,10 +219,10 @@ class _StatusRespPaymentez {
 
   /// HTTP CODE 500: internalServerError
   static const int badRequest = 50001;
-  static const int notAuthorized = 50002;
-  static const int rejectedByKount = 50003;
-  static const int internalServerError = 50004;
-  static const int cardsNone = 50005;
+  // static const int notAuthorized = 50002;
+  // static const int rejectedByKount = 50003;
+  // static const int internalServerError = 50004;
+  // static const int cardsNone = 50005;
 
   /// ERRORES NO REPORTADOS POR NINGUN LADO
   static const int stranger = -1;

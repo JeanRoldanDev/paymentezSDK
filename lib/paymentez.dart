@@ -78,8 +78,13 @@ class Paymentez {
     );
   }
 
-  Future<PaymentezResp> verify(String userId, String transactionId, String type,
-      String value, bool moreInfo) async {
+  Future<PaymentezResp> verify({
+    @required String userId,
+    @required String transactionId,
+    @required String type,
+    @required String value,
+    @required bool moreInfo,
+  }) async {
     return await _paymentezRepositoryInterface.verify(
       userId: userId,
       transactionId: transactionId,
@@ -89,8 +94,67 @@ class Paymentez {
     );
   }
 
-  Future<PaymentezResp> debitToken(
-      UserPay user, CardPay card, OrderPay orderPay) async {
+  /// **TODOS LOS COMERCIOS** deben implementar el MÉTODO REFUND para realizar
+  /// los reembolsos de las transacciones, debido a que es una solicitud de los
+  /// Bancos.
+  ///
+  ///
+  /// También es necesario **ENVIAR UN CORREO DE CONFIRMACIÓN** después de cada
+  /// transacción al cliente, notificándose el detalle de la compra,
+  /// TRANSACTION_ID (DF) y AUTHORIZATION_CODE (número de autorización) Si los
+  /// datos descritos no se encuentran implementados, el comercio no podrá
+  /// avanzar en su integración.
+  ///
+  ///
+  /// **[user]**: usa un modelos UserPay
+  ///
+  /// **[card]**: usa un modelos CardPay, para obtener el tipo debes usar
+  ///
+  /// final cardInfo = PaymentezValidate.getCarInfo(yourNumberCard);
+  ///
+  /// **Uso sin IVA**
+  /// ```dart
+  /// final order = OrderPay(
+  ///   amount: 112.00,
+  ///   description: 'pizzas',
+  ///   devReference: 'token_orden_BT01',
+  ///   vat: 0,
+  ///   taxPercentage: 0, //Este valor por defecto es 0
+  /// );
+  /// ```
+  ///
+  ///
+  /// **Uso declarando el IVA**
+  /// ```dart
+  /// final order = OrderPay(
+  ///   amount: 112.00,
+  ///   description: 'pizzas',
+  ///   devReference: 'token_orden_BT01',
+  ///   vat: 12.00,
+  ///   taxPercentage: 12,
+  ///   taxableAmount: 100.00,
+  /// );
+  /// ```
+  ///
+  ///
+  /// **Uso para diferido a 3 meses sin intereses**
+  /// ```dart
+  /// final order = OrderPay(
+  ///   amount: 112.00,
+  ///   description: 'pizzas',
+  ///   devReference: 'token_orden_BT01',
+  ///   vat: 12.00,
+  ///   taxPercentage: 12,
+  ///   taxableAmount: 100.00,
+  ///   installments: 3,
+  ///   installmentsType: 1,
+  /// );
+  /// ```
+  Future<PaymentezResp> debitToken({
+    @required UserPay user,
+    @required CardPay card,
+    @required OrderPay orderPay,
+  }) async {
     return await _paymentezRepositoryInterface.debitToken(
       user: user,
       card: card,

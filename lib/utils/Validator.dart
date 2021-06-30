@@ -127,7 +127,7 @@ class ValidatorUtils {
   static bool validarCodigoProvincia(String numero) {
     if (int.parse(numero) < 0 || int.parse(numero) > 24) {
       throw Exception(
-          'Codigo de Provincia (dos primeros dígitos) no deben ser mayor a 24 ni menores a 0');
+          '''Codigo de Provincia (dos primeros dígitos) no deben ser mayor a 24 ni menores a 0''');
     }
     return true;
   }
@@ -139,7 +139,7 @@ class ValidatorUtils {
       case TypeDocument.rucNatural:
         if (int.parse(numero) < 0 || int.parse(numero) > 5) {
           throw Exception(
-              'Tercer dígito debe ser mayor o igual a 0 y menor a 6 para cédulas y RUC de persona natural ... permitidos de 0 a 5');
+              '''Tercer dígito debe ser mayor o igual a 0 y menor a 6 para cédulas y RUC de persona natural ... permitidos de 0 a 5''');
         }
         break;
       case TypeDocument.rucPrivada:

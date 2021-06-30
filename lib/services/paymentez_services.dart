@@ -15,7 +15,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
         '${configAuthorization.getHost()}/v2/card/list?uid=$userId',
         headers: {'Auth-Token': tokenAuth.toString()},
       );
-      debugPrint('**********************************************> GetAllCards');
+      debugPrint('***PAYMENTES==> GetAllCards');
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
       return _prepareReturn(
@@ -51,7 +51,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
         headers: {'Auth-Token': tokenAuth.toString()},
         body: json.encode(dat),
       );
-      debugPrint('************************************************> DelCard');
+      debugPrint('***PAYMENTES==> DelCard');
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
       return _prepareReturn(
@@ -77,54 +77,54 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
     CardPay card,
     String sessionId,
   }) async {
-    // try {
-    final tokenAuth = PaymentezSecurity.getAuthToken(
-      configAuthorization.appCode,
-      configAuthorization.appClientKey,
-    );
-    final dat = {
-      'session_id': sessionId,
-      'user': {
-        'id': user.id,
-        'email': user.email,
-        'phone': user.phone,
-      },
-      'card': {
-        'number': card.number,
-        'holder_name': card.holderName,
-        'expiry_month': card.expiryMonth,
-        'expiry_year': card.expiryYear,
-        'cvc': card.cvc,
-        // 'type': card.type,
-      },
-      'extra_params': {
-        'date': DateTime.now().formatDate,
-        'hour': DateTime.now().formatHour,
+    try {
+      final tokenAuth = PaymentezSecurity.getAuthToken(
+        configAuthorization.appCode,
+        configAuthorization.appClientKey,
+      );
+      final dat = {
+        'session_id': sessionId,
+        'user': {
+          'id': user.id,
+          'email': user.email,
+          'phone': user.phone,
+        },
+        'card': {
+          'number': card.number,
+          'holder_name': card.holderName,
+          'expiry_month': card.expiryMonth,
+          'expiry_year': card.expiryYear,
+          'cvc': card.cvc,
+          // 'type': card.type,
+        },
+        'extra_params': {
+          'date': DateTime.now().formatDate,
+          'hour': DateTime.now().formatHour,
+        }
+      };
+      final response = await http.post(
+        '${configAuthorization.getHost()}/v2/card/add',
+        headers: {'Auth-Token': tokenAuth.toString()},
+        body: json.encode(dat),
+      );
+      debugPrint('***PAYMENTES==> AddCard');
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
+      return _prepareReturn(
+        response: response,
+        userId: user.id,
+        nameFunction: 'AddCard',
+      );
+    } catch (e) {
+      if (configAuthorization.isLogServe) {
+        _log(user.id, 'AddCard', 500, e.toString());
       }
-    };
-    final response = await http.post(
-      '${configAuthorization.getHost()}/v2/card/add',
-      headers: {'Auth-Token': tokenAuth.toString()},
-      body: json.encode(dat),
-    );
-    debugPrint('***PAYMENTES==> AddCard');
-    debugPrint(response.statusCode.toString());
-    debugPrint(response.body);
-    return _prepareReturn(
-      response: response,
-      userId: user.id,
-      nameFunction: 'AddCard',
-    );
-    // } catch (e) {
-    //   if (configAuthorization.isLogServe) {
-    //     _log(user.id, 'AddCard', 500, e.toString());
-    //   }
-    //   return PaymentezResp(
-    //     status: StatusResp.internalServerError,
-    //     message: 'Servicio no disponible, inténtelo más tarde',
-    //     data: null,
-    //   );
-    // }
+      return PaymentezResp(
+        status: StatusResp.internalServerError,
+        message: 'Servicio no disponible, inténtelo más tarde',
+        data: null,
+      );
+    }
   }
 
   @override
@@ -184,8 +184,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
         headers: {'Auth-Token': tokenAuth.toString()},
         body: json.encode(dat),
       );
-
-      debugPrint('*******************************************> Verify_$type');
+      debugPrint('***PAYMENTES==> Verify_$type');
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
       return _prepareReturn(
@@ -206,8 +205,11 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
   }
 
   @override
-  Future<PaymentezResp> debitToken(
-      {UserPay user, CardPay card, OrderPay orderPay}) async {
+  Future<PaymentezResp> debitToken({
+    UserPay user,
+    CardPay card,
+    OrderPay orderPay,
+  }) async {
     try {
       final tokenAuth = PaymentezSecurity.getAuthToken(
         configAuthorization.appCodeSERVER,
@@ -221,14 +223,13 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
           'description': orderPay.description,
           'dev_reference': orderPay.devReference,
           'vat': orderPay.vat,
+          'tax_percentage': orderPay.taxPercentage,
+          orderPay.taxableAmount == null ? '' : 'taxable_amount':
+              orderPay.taxableAmount,
           orderPay.installments == null ? '' : 'installments':
               orderPay.installments,
           orderPay.installmentsType == null ? '' : 'installments_type':
               orderPay.installmentsType,
-          orderPay.taxableAmount == null ? '' : 'taxable_amount':
-              orderPay.taxableAmount,
-          orderPay.taxPercentage == null ? '' : 'tax_percentage':
-              orderPay.taxPercentage
         },
       };
       final response = await http.post(
@@ -236,8 +237,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
         headers: {'Auth-Token': tokenAuth.toString()},
         body: json.encode(dat),
       );
-      debugPrint(
-          '************************************************> DebitToken');
+      debugPrint('***PAYMENTES==> DebitToken');
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
       return _prepareReturn(
@@ -284,7 +284,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
       }
       return PaymentezResp(
         status: StatusResp.internalServerError,
-        message: 'Algo paso, vuelve a intentarlo',
+        message: 'Algo paso, vuelve a intentarlo más tarde',
         data: null,
       );
     }
@@ -304,7 +304,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
       }
       return PaymentezResp(
         status: StatusResp.stranger,
-        message: 'Algo paso, vuelve a intentarlo',
+        message: 'Algo paso, vuelve a intentarlo nuevamente',
         data: null,
       );
     }

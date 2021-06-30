@@ -46,7 +46,9 @@ class CardPay {
       origin: dat['origin'],
       cardInfo: CardInfo.toModel(dat),
       cvc: '',
-      statusEs: getStatusEs(dat['status'].toString()),
+      statusEs: dat['message'].toString() == 'WAITING_OTP'
+          ? getStatusEs('WAITING_OTP')
+          : getStatusEs(dat['status'].toString()),
       message: dat['message'].toString(),
     );
   }
@@ -81,21 +83,14 @@ class CardPay {
     switch (status) {
       case 'valid':
         return 'Aprobada';
-        break;
       case 'review':
         return 'En revisión';
-        break;
       case 'rejected':
         return 'Rechazada';
-        break;
       case 'pending':
         return 'Pendiente';
-        break;
-      case 'WAITING_OTP':
-        return 'Pendiente de validar por OPT';
-        break;
       default:
-        return 'otra $status';
+        return '$status';
         break;
     }
   }

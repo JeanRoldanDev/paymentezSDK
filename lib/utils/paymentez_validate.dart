@@ -368,8 +368,8 @@ class PaymentezValidate {
   }
 
   /// =====================Tipo de cuotas=====================
-  ///El tipo de cuotas solo están disponibles para Ecuador y México.
-  ///Los valores válidos son:
+  /// El tipo de cuotas solo están disponibles para Ecuador y México.
+  /// Los valores válidos son:
   static List<dynamic> getInstallmentsType() {
     return [
       {
@@ -379,7 +379,7 @@ class PaymentezValidate {
       {
         'Type': 1,
         'Description':
-            'Rotativo y diferido sin intereses (el banco pagará al comercio la cuota, mes a mes).',
+            '''Rotativo y diferido sin intereses (el banco pagará al comercio la cuota, mes a mes).''',
       },
       {
         'Type': 2,
