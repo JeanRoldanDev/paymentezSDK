@@ -3,6 +3,7 @@ library paymentez;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:paymentez/models/orderPay.dart';
 import 'package:paymentez/models/paymentez_resp.dart';
@@ -11,6 +12,7 @@ import 'package:paymentez/repository/paymentez_repository_interface.dart';
 import 'package:paymentez/utils/paymentez_security.dart';
 import 'package:http/http.dart' as http;
 import 'package:paymentez/models/cardPay.dart';
+import 'package:paymentez/utils/validator.dart';
 part 'services/paymentez_services.dart';
 
 class Paymentez {
@@ -23,10 +25,32 @@ class Paymentez {
     return _instance;
   }
 
+  /// **[sessionId]**: Parámetro relacionado con el fraude.
+  /// es un Hash numérico de 32 longitudes. y lo puedes generar con
+  /// PaymentezSecurity.getSessionID()
+  ///
+  /// **[user]**: usa un modelos UserPay
+  ///
+  /// **[card]**: usa un modelos CardPay, para obtener el tipo debes usar
+  ///
+  /// final cardInfo = PaymentezValidate.getCarInfo(yourNumberCard);
+  ///
+  /// **Estos son los campos necesarios para poder agregar una tarjeta**
+  /// ```dart
+  /// final card = CardPay(
+  ///   number: '123456xxxxxx1234',
+  ///   holderName: 'Tarjetahabiente',
+  ///   expiryMonth: 6,
+  ///   expiryYear: 2025,
+  ///   cvc: '123',
+  ///   //type: cardInfo.type, ya no es obligatorio :) >:(
+  /// );
+  /// ```
+  ///
   Future<PaymentezResp> addCard({
-    UserPay user,
-    CardPay card,
-    String sessionId,
+    @required String sessionId,
+    @required UserPay user,
+    @required CardPay card,
   }) async {
     return await _paymentezRepositoryInterface.addCard(
       user: user,
@@ -83,6 +107,7 @@ class ConfigAuthorization {
     @required this.appCodeSERVER,
     @required this.appClientKeySERVER,
     this.isLogServe = false,
+    this.enableTracking = false,
     this.urlLogServe,
     this.headers,
   });
@@ -93,6 +118,7 @@ class ConfigAuthorization {
   final String appCodeSERVER;
   final String appClientKeySERVER;
   final bool isLogServe;
+  final bool enableTracking;
   final String urlLogServe;
   final Map<String, String> headers;
 

@@ -27,8 +27,8 @@ enum StatusResp {
   serviceUnavailable,
 
   /// ERRORES PROVOCADOS AL PROPOSITO:
-  /// 429: while con true para verficar la alta disponibilidad
-  /// y balanceo de carga transaccional 'ofrecido' :
+  /// 429: **while con true XD** para verficar la alta disponibilidad
+  /// y balanceo de carga transaccional 'ofrecido':
   /// EXPERIENCIAS:
   /// 451: tuvimos una 'LINDA' experiencia con una tarjeta de credito
   /// internacional proveniente de Africa (Ibhange laseGhana).
@@ -81,50 +81,50 @@ class PaymentezResp {
     }
 
     if (map.containsKey('error')) {
-      final myStatus = _getStatusError(map['error']);
-      switch (myStatus) {
-        case StatusRespPaymentez.cardAlreadyAdded:
+      final srPay = _StatusRespPaymentez.getStatusRespPaymentez(map['error']);
+      switch (srPay) {
+        case _StatusRespPaymentez.cardAlreadyAdded:
           status = StatusResp.conflict;
           message = 'Si desea actualizar la tarjeta, primero elimínela.';
           data = null;
           break;
-        case StatusRespPaymentez.invalidDateOfValidity:
+        case _StatusRespPaymentez.invalidDateOfValidity:
           status = StatusResp.conflict;
           message = 'Fecha de validez no válida.';
           data = null;
           break;
-        case StatusRespPaymentez.cardInvalidNumber:
+        case _StatusRespPaymentez.cardInvalidNumber:
           status = StatusResp.conflict;
           message = 'Escribe un número válido de tarjeta.';
           data = null;
           break;
-        case StatusRespPaymentez.badRequest:
+        case _StatusRespPaymentez.badRequest:
           status = StatusResp.conflict;
           message = 'El tipo de tarjeta no es correcto o no es soportada';
           data = null;
           break;
-        case StatusRespPaymentez.validationError:
+        case _StatusRespPaymentez.validationError:
           status = StatusResp.conflict;
           message = 'Escribe un número válido de tarjeta.';
           data = null;
           break;
-        case StatusRespPaymentez.invalidToken:
+        case _StatusRespPaymentez.invalidToken:
           status = StatusResp.conflict;
           message = 'Token Invalido';
           data = null;
           break;
-        case StatusRespPaymentez.transactionExceededApp:
+        case _StatusRespPaymentez.transactionExceededApp:
           status = StatusResp.conflict;
           message =
               '''Se superó el número de transacciones mostradas para esta aplicación''';
           data = null;
           break;
-        case StatusRespPaymentez.verificationError:
+        case _StatusRespPaymentez.verificationError:
           status = StatusResp.conflict;
           message = 'Error en la verificación';
           data = null;
           break;
-        case StatusRespPaymentez.stranger:
+        case _StatusRespPaymentez.stranger:
           status = StatusResp.conflict;
           message = 'Verifica el número de la tajeta';
           data = null;
@@ -146,75 +146,84 @@ class PaymentezResp {
   final StatusResp status;
   final String message;
   final dynamic data;
+}
 
-  static StatusRespPaymentez _getStatusError(dynamic error) {
+class _StatusRespPaymentez {
+  _StatusRespPaymentez._();
+
+  static int getStatusRespPaymentez(dynamic error) {
     final type = error['type'].toString().split(':')[0].toString();
     final description = error['description'].toString();
+
     if (type == 'Card already added') {
-      return StatusRespPaymentez.cardAlreadyAdded;
+      return _StatusRespPaymentez.cardAlreadyAdded;
     }
+
     if (type == 'OperationNotAllowedError' &&
         description == 'Invalid date of validity') {
-      return StatusRespPaymentez.invalidDateOfValidity;
+      return _StatusRespPaymentez.invalidDateOfValidity;
     }
+
     if (type == 'Escribe un número válido de tarjeta.') {
-      return StatusRespPaymentez.cardInvalidNumber;
+      return _StatusRespPaymentez.cardInvalidNumber;
     }
+
     if (type == 'BadRequest') {
-      return StatusRespPaymentez.badRequest;
+      return _StatusRespPaymentez.badRequest;
     }
+
     if (type == 'ValidationError') {
-      return StatusRespPaymentez.validationError;
+      return _StatusRespPaymentez.validationError;
     }
+
     if (type == 'Invalid Token') {
-      return StatusRespPaymentez.invalidToken;
+      return _StatusRespPaymentez.invalidToken;
     }
+
     if (type == 'Number of showed transaction exceeded for this application') {
-      return StatusRespPaymentez.transactionExceededApp;
+      return _StatusRespPaymentez.transactionExceededApp;
     } else {
       final newType = error['type'].toString();
       final jsonData = Map.from(json.decode(newType.replaceAll("'", '"')));
       if (jsonData.containsKey('code') && jsonData.containsKey('description')) {
         if (jsonData['code'].toString() == '7' &&
             jsonData['description'].toString() == 'VerificationError') {
-          return StatusRespPaymentez.verificationError;
+          return _StatusRespPaymentez.verificationError;
         } else {
-          return StatusRespPaymentez.stranger;
+          return _StatusRespPaymentez.stranger;
         }
       } else {
-        return StatusRespPaymentez.stranger;
+        return _StatusRespPaymentez.stranger;
       }
     }
   }
-}
 
-enum StatusRespPaymentez {
   /// HTTP CODE 200: success
-  valid,
+  static const int valid = 20001;
 
   /// HTTP CODE 404: not_found
-  notFound,
+  static const int notFound = 40401;
 
   /// HTTP CODE 400: conflict
-  validationError,
+  static const int validationError = 40001;
 
   /// HTTP CODE 401: conflict
-  invalidToken,
+  static const int invalidToken = 40101;
 
   /// HTTP CODE 403: conflict
-  invalidDateOfValidity,
-  cardAlreadyAdded,
-  cardInvalidNumber,
-  verificationError,
-  transactionExceededApp,
+  static const int invalidDateOfValidity = 40301;
+  static const int cardAlreadyAdded = 40302;
+  static const int cardInvalidNumber = 40303;
+  static const int verificationError = 40304;
+  static const int transactionExceededApp = 40305;
 
   /// HTTP CODE 500: internalServerError
-  badRequest,
-  notAuthorized,
-  rejectedByKount,
-  internalServerError,
-  cardsNone,
+  static const int badRequest = 50001;
+  static const int notAuthorized = 50002;
+  static const int rejectedByKount = 50003;
+  static const int internalServerError = 50004;
+  static const int cardsNone = 50005;
 
   /// ERRORES NO REPORTADOS POR NINGUN LADO
-  stranger
+  static const int stranger = -1;
 }

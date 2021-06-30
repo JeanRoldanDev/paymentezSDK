@@ -48,8 +48,11 @@ class PaymentezValidate {
     CardInfo cardInfo;
     var name = _noSupport;
     if (numCardLenth6.length < 6) {
-      throw Exception('''PaymentezValidate.getCarInfo, ERROR: 
-                         numCardLenth6 debe contener 6 caracteres''');
+      throw Exception('''
+          
+          PaymentezValidate.getCarInfo, 
+          ERROR: numCardLenth6 debe contener 6 caracteres
+          ''');
     }
     OUTER:
     for (var i = 0; i < _typesCardsCodes.keys.length; i++) {

@@ -34,8 +34,8 @@ class PaymentezSecurity {
   /// https://www.discoverglobalnetwork.com/downloads/IPP_VAR_Compliance.pdf
   /// https://en.wikipedia.org/wiki/Payment_card_number
   ///
-  /// Necesita el numero de tarjeta sin espacios ni guion
-  static bool validCard(String numCard) {
+  /// Necesita el número de tarjeta sin espacios ni guion
+  static bool validCardLuhn(String numCard) {
     var sum = 0;
     final length = numCard.length;
     for (var i = 0; i < length; i++) {
@@ -49,8 +49,8 @@ class PaymentezSecurity {
   }
 
   /// ============ID DE SESSION==============///
-  /// SE NECESITARA PARA CREAR SESSIONES DE TRANFERENCIAS
-  static String getSessionID(int len) {
+  /// Parámetro relacionado con el fraude. Hash numérico de 32 longitudes.
+  static String getSessionID({int len = 32}) {
     final rng = Random();
     var resp = '';
     for (var i = 0; i < len; i++) {
@@ -59,6 +59,8 @@ class PaymentezSecurity {
     return resp;
   }
 
+  /// Usar Validator
+  @deprecated
   static String formatDate(DateTime now) {
     final day = (now.day < 10) ? '0${now.day.toString()}' : now.day.toString();
     final month =
@@ -67,6 +69,8 @@ class PaymentezSecurity {
     return '$day/$month/$year';
   }
 
+  /// Usar Validator
+  @deprecated
   static String formatHour(DateTime now) {
     final hour =
         (now.hour < 10) ? '0${now.hour.toString()}' : now.hour.toString();

@@ -37,7 +37,7 @@ class CardPay {
       bin: dat['bin'],
       status: dat['status'],
       token: dat['token'],
-      holderName: dat['holder_name'].toString(),
+      holderName: dat['holder_name'],
       expiryMonth: int.parse(dat['expiry_month'].toString()),
       expiryYear: int.parse(dat['expiry_year'].toString()),
       transactionReference: dat['transaction_reference'],

@@ -1,46 +1,52 @@
 import 'package:flutter/foundation.dart';
 
-//http://hg.openjdk.java.net/jdk7u/jdk7u6/jdk/file/8c2c5d63a17e/src/share/classes/java/lang/String.java
 extension Validator on String {
-  bool get cgzIsText => ValidatorUtils.isTextPro(this);
-  bool get cgzIsEMail => ValidatorUtils.isEmailPro(this);
-  bool get cgzIsPass => ValidatorUtils.isPass(this);
-  bool get cgzHaveContinuousSpaces => ValidatorUtils.haveContinuousSpaces(this);
-  bool cgzIsMaxlength(int b) => ValidatorUtils.maxlength(this, b);
-  bool get cgzIsCedula => ValidatorUtils.validarCedula(this);
-  bool get cgzIsRuc => ValidatorUtils.validarRuc(this);
-  bool get cgzIsPhoneNumber => ValidatorUtils.validarTelefono(this);
+  bool get isTextCardholder => ValidatorUtils.isTextCardholder(this);
+  bool get haveContinuousSpaces => ValidatorUtils.haveContinuousSpaces(this);
+  bool get isTextLatin => ValidatorUtils.isTextLatin(this);
+  bool get isEmailFull => ValidatorUtils.isEmailFull(this);
+  bool get isPass => ValidatorUtils.isPass(this);
+  bool get isPhoneNumber => ValidatorUtils.isPhoneNumber(this);
+
+  /// valid Cedula for Ecuador
+  bool get isIDec => ValidatorUtils.validarCedula(this);
+
+  /// valid RUC for Ecuador
+  bool get isBatec => ValidatorUtils.validarRuc(this);
 }
 
 extension DateFormat on DateTime {
-  String get cgzGetFech => ValidatorUtils.formatFech(this);
-  String get cgzGetHour => ValidatorUtils.formatHour(this);
+  String get formatDate => ValidatorUtils.formatDate(this);
+  String get formatHour => ValidatorUtils.formatHour(this);
 }
 
 class ValidatorUtils {
   ValidatorUtils._();
 
-  static String formatFech(DateTime now) {
-    final day = (now.day < 10) ? '0{$now.day.toString()}' : now.day.toString();
+  static String formatDate(DateTime now) {
+    final day = (now.day < 10) ? '0${now.day.toString()}' : now.day.toString();
     final month =
-        (now.month < 10) ? '0{$now.month.toString()}' : now.month.toString();
+        (now.month < 10) ? '0${now.month.toString()}' : now.month.toString();
     final year = now.year.toString();
-    final result = '$day/$month/$year';
-    return result;
+    return '$day/$month/$year';
   }
 
   static String formatHour(DateTime now) {
     final hour =
-        (now.hour < 10) ? '0{$now.hour.toString()}' : now.hour.toString();
+        (now.hour < 10) ? '0${now.hour.toString()}' : now.hour.toString();
     final minute =
-        (now.minute < 10) ? '0{$now.minute.toString()}' : now.minute.toString();
+        (now.minute < 10) ? '0${now.minute.toString()}' : now.minute.toString();
     final second =
-        (now.second < 10) ? '0{$now.second.toString()}' : now.second.toString();
-    final result = '$hour:$minute:$second';
-    return result;
+        (now.second < 10) ? '0${now.second.toString()}' : now.second.toString();
+    return '$hour:$minute:$second';
   }
 
-  static bool isEmailPro(String string) {
+  static bool isTextCardholder(String string) {
+    final regExp = RegExp(r'^[A-Z ]{5,20}$');
+    return regExp.hasMatch(string);
+  }
+
+  static bool isEmailFull(String string) {
     final regExp = RegExp(
         r'^([a-zA-Z0-9._-]{2,})@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]{2,}\.)+[a-zA-Z]{2,}))$');
     return regExp.hasMatch(string);
@@ -52,21 +58,18 @@ class ValidatorUtils {
     return regExp.hasMatch(string);
   }
 
-  static bool isTextPro(String string) {
+  static bool isTextLatin(String string) {
     //VALIDA SI SOLO ES TEXTO
     final regExp = RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚ ]{2,200}$');
     return regExp.hasMatch(string);
   }
 
   static bool haveContinuousSpaces(String string) {
-    //VALIDA QUE NO TENGA NOS ESPACIOS SEGIDOS
     final regExp = RegExp(r'\s{2,}');
     return regExp.hasMatch(string);
   }
 
-  static bool maxlength(String string, int max) => (string.length > max);
-
-  static bool validarTelefono(String string) {
+  static bool isPhoneNumber(String string) {
     final regExp = RegExp(r'^[0-9 ]{12,12}$');
     return regExp.hasMatch(string);
   }
@@ -100,6 +103,7 @@ class ValidatorUtils {
     return true;
   }
 
+  /// https://github.com/diaspar/validacion-cedula-ruc-ecuador/blob/master/validadores/php/ValidarIdentificacion.php
   @protected
   static bool validarInicial(String numero, int caracteres) {
     if (numero.isEmpty) {
@@ -164,10 +168,11 @@ class ValidatorUtils {
     return true;
   }
 
-// https://github.com/diaspar/validacion-cedula-ruc-ecuador/blob/master/validadores/php/ValidarIdentificacion.php
   @protected
   static bool algoritmoModulo10(
-      String digitosInicialesDAT, int digitoVerificador) {
+    String digitosInicialesDAT,
+    int digitoVerificador,
+  ) {
     final arrayCoeficientes = List<int>.from([2, 1, 2, 1, 2, 1, 2, 1, 2]);
     final digitosIniciales = digitosInicialesDAT.split('').toList();
     var total = 0;

@@ -77,56 +77,54 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
     CardPay card,
     String sessionId,
   }) async {
-    try {
-      final tokenAuth = PaymentezSecurity.getAuthToken(
-        configAuthorization.appCode,
-        configAuthorization.appClientKey,
-      );
-      final dat = {
-        'session_id': sessionId,
-        'user': {
-          'id': user.id,
-          'email': user.email,
-          'phone': user.phone,
-          // 'ip_address': null,
-          // 'fiscal_number': null,
-        },
-        'card': {
-          'number': card.number,
-          'holder_name': card.holderName,
-          'expiry_month': card.expiryMonth,
-          'expiry_year': card.expiryYear,
-          'cvc': card.cvc,
-          'type': card.type,
-        },
-        'extra_params': {
-          'date': PaymentezSecurity.formatDate(DateTime.now()),
-          'hour': PaymentezSecurity.formatHour(DateTime.now()),
-        }
-      };
-      final response = await http.post(
-        '${configAuthorization.getHost()}/v2/card/add',
-        headers: {'Auth-Token': tokenAuth.toString()},
-        body: json.encode(dat),
-      );
-      debugPrint('************************************************> AddCard');
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
-      return _prepareReturn(
-        response: response,
-        userId: user.id,
-        nameFunction: 'AddCard',
-      );
-    } catch (e) {
-      if (configAuthorization.isLogServe) {
-        _log(user.id, 'AddCard', 500, e.toString());
+    // try {
+    final tokenAuth = PaymentezSecurity.getAuthToken(
+      configAuthorization.appCode,
+      configAuthorization.appClientKey,
+    );
+    final dat = {
+      'session_id': sessionId,
+      'user': {
+        'id': user.id,
+        'email': user.email,
+        'phone': user.phone,
+      },
+      'card': {
+        'number': card.number,
+        'holder_name': card.holderName,
+        'expiry_month': card.expiryMonth,
+        'expiry_year': card.expiryYear,
+        'cvc': card.cvc,
+        // 'type': card.type,
+      },
+      'extra_params': {
+        'date': DateTime.now().formatDate,
+        'hour': DateTime.now().formatHour,
       }
-      return PaymentezResp(
-        status: StatusResp.internalServerError,
-        message: 'Servicio no disponible, inténtelo más tarde',
-        data: null,
-      );
-    }
+    };
+    final response = await http.post(
+      '${configAuthorization.getHost()}/v2/card/add',
+      headers: {'Auth-Token': tokenAuth.toString()},
+      body: json.encode(dat),
+    );
+    debugPrint('***PAYMENTES==> AddCard');
+    debugPrint(response.statusCode.toString());
+    debugPrint(response.body);
+    return _prepareReturn(
+      response: response,
+      userId: user.id,
+      nameFunction: 'AddCard',
+    );
+    // } catch (e) {
+    //   if (configAuthorization.isLogServe) {
+    //     _log(user.id, 'AddCard', 500, e.toString());
+    //   }
+    //   return PaymentezResp(
+    //     status: StatusResp.internalServerError,
+    //     message: 'Servicio no disponible, inténtelo más tarde',
+    //     data: null,
+    //   );
+    // }
   }
 
   @override
@@ -320,6 +318,7 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
       'data': response,
       'urlLogServe': configAuthorization.urlLogServe,
       'headers': configAuthorization.headers,
+      'enableTracking': configAuthorization.enableTracking,
     });
     compute(_sendLogErrors, data);
   }
@@ -327,6 +326,12 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
   static Future<void> _sendLogErrors(Map<String, dynamic> params) async {
     debugPrint('==============================log===========================');
     try {
+      var ipv4 = '-';
+      var ipv6 = '-';
+      if (params['enableTracking']) {
+        ipv4 = await Ipify.ipv4(format: Format.JSON);
+        ipv6 = await Ipify.ipv64(format: Format.JSON);
+      }
       final dat = {
         'user_fk': params['userId'].toString(),
         'typeFun': params['typeFun'].toString(),
@@ -339,6 +344,8 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
           'operatingSystem': Platform.operatingSystem,
           'operatingSystemVersion': Platform.operatingSystemVersion,
           'version': Platform.version,
+          'ipv4': ipv4,
+          'ipv6': ipv6,
         }
       };
       final response = await http.post(
@@ -347,7 +354,6 @@ class _PaymentezServices extends PaymentezRepositoryInterface {
         body: json.encode(dat),
       );
       debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
     } catch (e) {
       debugPrint('ERROR LOG: $e');
     }
