@@ -51,25 +51,6 @@ class CardPay {
     );
   }
 
-  factory CardInfo.copyWith({
-    this.bin,
-    this.status,
-    this.token,
-    this.holderName,
-    this.expiryMonth,
-    this.expiryYear,
-    this.transactionReference,
-    this.type,
-    this.number,
-    this.origin,
-    this.cardInfo,
-    this.cvc,
-    this.statusEs,
-    this.message,
-  }) {
-    return CardPay();
-  }
-
   CardPay copyWith({
     String bin,
     String status,
