@@ -15,7 +15,7 @@ enum TypeCard {
 }
 
 class CardPay {
-  CardPay({
+  const CardPay({
     this.bin,
     this.status,
     this.token,
@@ -46,12 +46,62 @@ class CardPay {
       origin: dat['origin'],
       cardInfo: CardInfo.toModel(dat),
       cvc: '',
-      statusEs: dat['message'].toString() == 'WAITING_OTP'
-          ? getStatusEs('WAITING_OTP')
-          : getStatusEs(dat['status'].toString()),
+      statusEs: dat['message'].toString() == 'WAITING_OTP' ? getStatusEs('WAITING_OTP') : getStatusEs(dat['status'].toString()),
       message: dat['message'].toString(),
     );
   }
+
+  factory CardInfo.copyWith({
+    this.bin,
+    this.status,
+    this.token,
+    this.holderName,
+    this.expiryMonth,
+    this.expiryYear,
+    this.transactionReference,
+    this.type,
+    this.number,
+    this.origin,
+    this.cardInfo,
+    this.cvc,
+    this.statusEs,
+    this.message,
+  }) {
+    return CardPay();
+  }
+
+  CardPay copyWith({
+    String bin,
+    String status,
+    String token,
+    String holderName,
+    int expiryMonth,
+    int expiryYear,
+    String transactionReference,
+    String type,
+    String number,
+    String origin,
+    CardInfo cardInfo,
+    String cvc,
+    String statusEs,
+    String message,
+  }) =>
+      CardPay(
+        bin: bin ?? this.bin,
+        status: status ?? this.status,
+        token: token ?? this.token,
+        holderName: holderName ?? this.holderName,
+        expiryMonth: expiryMonth ?? this.expiryMonth,
+        expiryYear: expiryYear ?? this.expiryYear,
+        transactionReference: transactionReference ?? this.transactionReference,
+        type: type ?? this.type,
+        number: number ?? this.number,
+        origin: origin ?? this.origin,
+        cardInfo: cardInfo ?? this.cardInfo,
+        cvc: cvc ?? this.cvc,
+        statusEs: statusEs ?? this.statusEs,
+        message: message ?? this.message,
+      );
 
   /// propertys Paymentez
   final String bin;
