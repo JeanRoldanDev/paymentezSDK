@@ -9,6 +9,7 @@ class CardRegister {
     required this.type,
     required this.number,
     this.transactionReference,
+    this.message,
   });
 
   factory CardRegister.fromJson(Map<String, dynamic> json) {
@@ -16,16 +17,22 @@ class CardRegister {
         ? null
         : json['transaction_reference'] as String;
 
+    final message = json['message'] == null ? null : json['message'] as String;
+
+    final holderName =
+        json['holder_name'] == null ? '' : json['holder_name'] as String;
+
     return CardRegister(
       bin: json['bin'] as String,
       status: json['status'] as String,
       token: json['token'] as String,
-      holderName: json['holder_name'] as String,
+      holderName: holderName,
       expiryYear: json['expiry_year'] as String,
       expiryMonth: json['expiry_month'] as String,
       transactionReference: transactionReference,
       type: json['type'] as String,
       number: json['number'] as String,
+      message: message,
     );
   }
 
@@ -38,6 +45,7 @@ class CardRegister {
   final String? transactionReference;
   final String type;
   final String number;
+  final String? message;
 
   Map<String, dynamic> toJson() => {
         'bin': bin,
@@ -49,5 +57,6 @@ class CardRegister {
         'transaction_reference': transactionReference,
         'type': type,
         'number': number,
+        if (message != null) 'message': message,
       };
 }

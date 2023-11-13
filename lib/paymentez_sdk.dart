@@ -24,12 +24,16 @@ class PaymentezSDK implements IPaymentez {
   final PaymentezImpl _svc;
 
   @override
-  Future<(CardsResponse?, PaymentezError?)> getAllCards(String userID) {
-    return _svc.getAllCards(userID);
-  }
+  Future<(CardsResponse?, PaymentezError?)> getAllCards(String userID) =>
+      _svc.getAllCards(userID);
 
   @override
-  Future<(AddCardResponse?, PaymentezError?)> addCard(AddCardRequest newCard) {
-    return _svc.addCard(newCard);
-  }
+  Future<(AddCardResponse?, PaymentezError?)> addCard(AddCardRequest newCard) =>
+      _svc.addCard(newCard);
+
+  @override
+  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard({
+    required DeleteCardRequest deleteCardRequest,
+  }) =>
+      _svc.deleteCard(deleteCardRequest: deleteCardRequest);
 }

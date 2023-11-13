@@ -5,7 +5,10 @@ import 'package:crypto/crypto.dart';
 class PaymentezSecurity {
   const PaymentezSecurity._();
 
-  static String getAuthToken(String appCode, String appKey) {
+  static String getAuthToken({
+    required String appCode,
+    required String appKey,
+  }) {
     final authTimeStamp =
         (DateTime.now().millisecondsSinceEpoch / 1000).floor();
     final uniqTokenString = '$appKey$authTimeStamp';

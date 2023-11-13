@@ -8,10 +8,10 @@ import 'package:paymentez/utils/utils.dart';
 class PaymentezImpl implements IPaymentez {
   PaymentezImpl({
     required this.client,
-    this.serverApplicationCode = '',
-    this.serverAppKey = '',
-    this.clientApplicationCode = '',
-    this.clientAppKey = '',
+    required this.serverApplicationCode,
+    required this.serverAppKey,
+    required this.clientApplicationCode,
+    required this.clientAppKey,
     this.isProd = false,
   });
 
@@ -26,10 +26,10 @@ class PaymentezImpl implements IPaymentez {
   String get _host =>
       isProd ? 'ccapi.paymentez.com ' : 'ccapi-stg.paymentez.com';
 
-  Map<String, String> _headers({bool isServer = false}) {
+  Map<String, String> _headers({required bool isServer}) {
     final authToken = PaymentezSecurity.getAuthToken(
-      isServer ? serverApplicationCode : clientApplicationCode,
-      isServer ? serverAppKey : clientAppKey,
+      appCode: isServer ? serverApplicationCode : clientApplicationCode,
+      appKey: isServer ? serverAppKey : clientAppKey,
     );
     return {'Auth-Token': authToken, 'Content-Type': 'application/json'};
   }
@@ -47,15 +47,52 @@ class PaymentezImpl implements IPaymentez {
     final body = json.decode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode == HttpStatus.ok) {
-      final cardsResponse = CardsResponse.fromJson(body);
-      return (cardsResponse, null);
+      final result = CardsResponse.fromJson(body);
+      return (result, null);
     }
 
     return (null, PaymentezError.fromJson(body));
   }
 
   @override
-  Future<(AddCardResponse?, PaymentezError?)> addCard(AddCardRequest newCard) {
-    throw UnimplementedError();
+  Future<(AddCardResponse?, PaymentezError?)> addCard(
+    AddCardRequest newCard,
+  ) async {
+    final url = Uri.https(_host, '/v2/card/add');
+    final response = await client.post(
+      url,
+      headers: _headers(isServer: false),
+      body: json.encode(newCard.toJson()),
+    );
+
+    final body = json.decode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode == HttpStatus.ok) {
+      final result = AddCardResponse.fromJson(body);
+      return (result, null);
+    }
+
+    return (null, PaymentezError.fromJson(body));
+  }
+
+  @override
+  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard({
+    required DeleteCardRequest deleteCardRequest,
+  }) async {
+    final url = Uri.https(_host, '/v2/card/delete');
+
+    final response = await client.post(
+      url,
+      headers: _headers(isServer: true),
+      body: json.encode(deleteCardRequest.toJson()),
+    );
+
+    final body = json.decode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == HttpStatus.ok) {
+      final result = DeleteCardResponse.fromJson(body);
+      return (result, null);
+    }
+
+    return (null, PaymentezError.fromJson(body));
   }
 }

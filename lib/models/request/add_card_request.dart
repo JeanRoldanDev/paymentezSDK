@@ -20,7 +20,6 @@ class NewCard {
     required this.expiryMonth,
     required this.expiryYear,
     required this.cvc,
-    required this.type,
   });
 
   String number;
@@ -28,7 +27,6 @@ class NewCard {
   int expiryMonth;
   int expiryYear;
   String cvc;
-  String type;
 
   Map<String, dynamic> toJson() => {
         'number': number,
@@ -36,7 +34,6 @@ class NewCard {
         'expiry_month': expiryMonth,
         'expiry_year': expiryYear,
         'cvc': cvc,
-        'type': type,
       };
 }
 
