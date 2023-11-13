@@ -2,3 +2,5 @@
 
 *.metadata
 *.zshrc
+
+/coverage
