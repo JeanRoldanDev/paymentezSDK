@@ -1,0 +1,7 @@
+{
+  "error": {
+      "type": "OperationNotAllowedException",
+      "help": "",
+      "description": "OperationNotAllowedException: card not found"
+  }
+}

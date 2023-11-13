@@ -187,5 +187,100 @@ void main() {
         expect(err, isA<PaymentezError>());
       });
     });
+
+    group('DeleteCard Method', () {
+      test('Response Success', () async {
+        final jsonResp = await Helpers.getJsonLocal(
+          'test/mock',
+          'delete_card_success.json',
+        );
+
+        final mockURI = Uri.parse(
+          'https://ccapi-stg.paymentez.com/v2/card/delete',
+        );
+
+        final modelRequest = DeleteCardRequest(
+          cardToken: 'data_mock',
+          userId: 'data_mock',
+        );
+
+        final headerMock = {
+          'Auth-Token': PaymentezSecurity.getAuthToken(
+            appCode: paymentez.serverApplicationCode,
+            appKey: paymentez.serverAppKey,
+          ),
+          'Content-Type': 'application/json'
+        };
+
+        when(
+          () => mockHttpClient.post(
+            mockURI,
+            headers: headerMock,
+            body: json.encode(modelRequest.toJson()),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonResp,
+            HttpStatus.ok,
+          ),
+        );
+
+        final (result, err) = await paymentez.deleteCard(
+          deleteCardRequest: modelRequest,
+        );
+
+        expect(err, isNull);
+        expect(result, isA<DeleteCardResponse>());
+      });
+      test('Response Error', () async {
+        final jsonResp = await Helpers.getJsonLocal(
+          'test/mock',
+          'delete_card_error.json',
+        );
+
+        final mockURI = Uri.parse(
+          'https://ccapi-stg.paymentez.com/v2/card/delete',
+        );
+
+        final modelRequest = DeleteCardRequest(
+          cardToken: 'data_mock',
+          userId: 'data_mock',
+        );
+
+        final headerMock = {
+          'Auth-Token': PaymentezSecurity.getAuthToken(
+            appCode: paymentez.serverApplicationCode,
+            appKey: paymentez.serverAppKey,
+          ),
+          'Content-Type': 'application/json'
+        };
+
+        when(
+          () => mockHttpClient.post(
+            mockURI,
+            headers: headerMock,
+            body: json.encode(modelRequest.toJson()),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonResp,
+            HttpStatus.internalServerError,
+          ),
+        );
+
+        final (result, err) = await paymentez.deleteCard(
+          deleteCardRequest: modelRequest,
+        );
+
+        expect(result, isNull);
+        expect(err, isA<PaymentezError>());
+      });
+    });
   });
+
+  group('Charge', () {});
+
+  group('Refund', () {});
+
+  group('Information', () {});
 }
