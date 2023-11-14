@@ -1,5 +1,6 @@
 .dart_tool
-
+.metadata
+pubspec.lock
 *.metadata
 *.zshrc
 
