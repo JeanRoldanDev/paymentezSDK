@@ -54,6 +54,59 @@ final addCardRequest = AddCardRequest(
 
 final (addCardResponse, paymentezError) = await sdk.addCard(addCardRequest);
 ```
+
+#### Pay with token card
+```dart
+final model = PayRequest(
+    user: UserPay(
+        id: '5a9b9072-4d60-4846-be71-d533d3851901',
+        email: 'test@example.com',
+        phone: '+593555555555',
+    ),
+    order: OrderPay(
+        taxPercentage: 12,
+        taxableAmount: 292.86,
+        vat: 35.14,
+        amount: 328,
+        description: 'pozole',
+        devReference: 'cod_order_buy_001',
+    ),
+    card: CardToken(
+        token: '14329172493919123772',
+    ),
+);
+
+final (payResponse, paymentezError) = await sdk.debit(model);
+```
+
+
+#### Pay with card direct 
+```dart
+final payPCIRequest = PayPCIRequest(
+    user: UserPay(
+        id: '5a9b9072-4d60-4846-be71-d533d3851901',
+        email: 'test@example.com',
+        phone: '+593555555555',
+    ),
+    order: OrderPay(
+        taxPercentage: 12,
+        taxableAmount: 292.86,
+        vat: 35.14,
+        amount: 328,
+        description: 'pozole',
+        devReference: 'cod_order_buy_001',
+    ),
+    card: CardPCI(
+        number: '4111111111111111',
+        holderName: 'citlali calderon',
+        expiryMonth: 9,
+        expiryYear: 2025,
+        cvc: '123',
+    ),
+);
+
+final (payResponse, paymentezError) = await sdk.debitCC(payPCIRequest);
+```
 ### Manejo de Errores
 
 ## Contribuciones
