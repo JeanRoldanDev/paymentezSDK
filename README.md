@@ -34,10 +34,14 @@ PaymentezSDK ofrece una gama completa de funcionalidades para facilitar y optimi
 ## Contribuciones
 Este SDK, fruto de la colaboración entre la 🧔🏻 comunidad 👩🏻 y empresas 🏢, valoramos enormemente las contribuciones para su mejora y expansión 🙏. Invitamos a contribuir con correcciones, mejoras o nuevas funcionalidades a través de pull requests 🧪 o issues🐞. Agradecemos especialmente a colaboradores destacados como: 
 
-🇪🇨 [agilerdev](https://github.com/agilerdev) - Flutter Ecuador 
+🇪🇨 [agilerdev](https://github.com/agilerdev) - Flutter Ecuador
+
 🧙‍♂️ [Alfredo32231](https://github.com/Alfredo32231) - Unidad Educativa Leonardo da Vinci
+
 🇪🇨 [br-programmer](https://github.com/br-programmer) - Flutter Ecuador
+
 🇵🇪 [CristhianLara1996](https://github.com/CristhianLara1996) - Flutter Peru
+
 『』[jose10395](https://github.com/jose10395) - Qhubit
 
 🤜🏻 Juntos 🤛🏻, podemos seguir mejorando esta herramienta vital para la comunidad de desarrolladores Flutter y Paymentez 🤗.
