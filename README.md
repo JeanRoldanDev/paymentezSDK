@@ -1,4 +1,3 @@
-
 ![Texto alternativo](./docs/paymentez.png)
 Este SDK para [Paymentez](https://paymentez.github.io/api-doc/#introduction) 💳, desarrollado por la comunidad de [Flutter Ecuador](https://twitter.com/flutter_ec) 🇪🇨, **NO ES UNA SOLUCIÓN OFICIAL DE PAYMENTEZ**, pero surge como respuesta a la creciente demanda de integraciones robustas y eficientes en el ecosistema de pagos digitales. Identificamos una necesidad significativa entre las empresas y desarrolladores que enfrentan dificultades y dudas al intentar integrar servicios de Paymentez en sus aplicaciones Flutter.
 
@@ -23,13 +22,39 @@ PaymentezSDK ofrece una gama completa de funcionalidades para facilitar y optimi
 **📧 Validación de Pagos con OTP:** Permite la validación de pagos mediante el uso de OTP, asegurando una mayor seguridad y cumplimiento en las transacciones.
 
 ## Instalación
---
+Nunca debe exponer sus credenciales de servidor en el código del lado del cliente de ningún sitio web público.
+
+Para iniciar la integración, deberá solicitar a [Nuvie](https://nuvei.com) Team Integrations@paidez.com una cuenta de Desarrollo/Sandbox. Por favor envíanos tu correo electrónico para identificarte como desarrollador y el nombre de tu empresa.
 ### Configuración Inicial
---
+```dart
+final sdk = PaymentezSDK(
+    clientApplicationCode: 'APP.....CODE.....CLIENT',
+    clientAppKey: 'L38fv.....KEY.....RXQoz',
+    serverApplicationCode: 'APP.....CODE.....SERVER',
+    serverAppKey: 'voRXQ.....KEY......Kn9v6I',
+);
+```
 ### Ejemplos de Uso
---
+#### Add Card
+Es una función típicamente utilizada en plataformas de procesamiento de pagos como Paymentez para agregar una tarjeta de crédito o débito en un baúl de protección donde se tokenizan las tarjetas agregadas para garantizar la seguridad y la privacidad de los datos, donde cada tarjeta agregada está vinculada a un usuario específico.
+```dart
+final addCardRequest = AddCardRequest(
+    user: UserCard(
+        id: '5a9b9072-4d60-4846-be71-d533d3851901',
+        email: 'test@example.com',
+    ),
+    card: NewCard(
+        number: '4111111111111111',
+        holderName: 'citlali calderon',
+        expiryMonth: 9,
+        expiryYear: 2025,
+        cvc: '123',
+    ),
+);
+
+final (addCardResponse, paymentezError) = await sdk.addCard(addCardRequest);
+```
 ### Manejo de Errores
---
 
 ## Contribuciones
 Este SDK, fruto de la colaboración entre la 🧔🏻 comunidad 👩🏻 y empresas 🏢, valoramos enormemente las contribuciones para su mejora y expansión 🙏. Invitamos a contribuir con correcciones, mejoras o nuevas funcionalidades a través de pull requests 🧪 o issues🐞. Agradecemos especialmente a colaboradores destacados como: 
@@ -45,3 +70,4 @@ Este SDK, fruto de la colaboración entre la 🧔🏻 comunidad 👩🏻 y empre
 『』[jose10395](https://github.com/jose10395) - Qhubit
 
 🤜🏻 Juntos 🤛🏻, podemos seguir mejorando esta herramienta vital para la comunidad de desarrolladores Flutter y Paymentez 🤗.
+</div>
