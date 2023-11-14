@@ -95,4 +95,44 @@ class PaymentezImpl implements IPaymentez {
 
     return (null, PaymentezError.fromJson(body));
   }
+
+  @override
+  Future<(PayResponse?, PaymentezError?)> debit(PayRequest payRequest) async {
+    final url = Uri.https(_host, '/v2/transaction/debit');
+
+    final response = await client.post(
+      url,
+      headers: _headers(isServer: true),
+      body: json.encode(payRequest.toJson()),
+    );
+
+    final body = json.decode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == HttpStatus.ok) {
+      final result = PayResponse.fromJson(body);
+      return (result, null);
+    }
+
+    return (null, PaymentezError.fromJson(body));
+  }
+
+  @override
+  Future<(PayResponse?, PaymentezError?)> debitCC(
+    PayPCIRequest payPCIRequest,
+  ) async {
+    final url = Uri.https(_host, '/v2/transaction/debit_cc');
+
+    final response = await client.post(
+      url,
+      headers: _headers(isServer: true),
+      body: json.encode(payPCIRequest.toJson()),
+    );
+
+    final body = json.decode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == HttpStatus.ok) {
+      final result = PayResponse.fromJson(body);
+      return (result, null);
+    }
+
+    return (null, PaymentezError.fromJson(body));
+  }
 }

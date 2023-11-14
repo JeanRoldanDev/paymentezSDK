@@ -36,4 +36,14 @@ class PaymentezSDK implements IPaymentez {
     required DeleteCardRequest deleteCardRequest,
   }) =>
       _svc.deleteCard(deleteCardRequest: deleteCardRequest);
+
+  @override
+  Future<(PayResponse?, PaymentezError?)> debit(PayRequest payRequest) =>
+      _svc.debit(payRequest);
+
+  @override
+  Future<(PayResponse?, PaymentezError?)> debitCC(
+    PayPCIRequest payPCIRequest,
+  ) =>
+      _svc.debitCC(payPCIRequest);
 }
