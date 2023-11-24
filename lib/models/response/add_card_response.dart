@@ -1,5 +1,5 @@
-import 'package:paymentez/models/response/card_register.dart';
-import 'package:paymentez/utils/utils.dart';
+import 'package:paymentez_sdk/models/response/card_register.dart';
+import 'package:paymentez_sdk/utils/utils.dart';
 
 class AddCardResponse {
   AddCardResponse({

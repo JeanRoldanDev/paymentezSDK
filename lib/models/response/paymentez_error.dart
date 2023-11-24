@@ -1,4 +1,4 @@
-import 'package:paymentez/utils/dynamic_ext.dart';
+import 'package:paymentez_sdk/utils/dynamic_ext.dart';
 
 class PaymentezError {
   PaymentezError({

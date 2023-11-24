@@ -1,6 +1,6 @@
-import 'package:paymentez/models/request/pay/card_pci.dart';
-import 'package:paymentez/models/request/pay/order_pay.dart';
-import 'package:paymentez/models/request/pay/user_pay.dart';
+import 'package:paymentez_sdk/models/request/pay/card_pci.dart';
+import 'package:paymentez_sdk/models/request/pay/order_pay.dart';
+import 'package:paymentez_sdk/models/request/pay/user_pay.dart';
 
 class PayPCIRequest {
   PayPCIRequest({

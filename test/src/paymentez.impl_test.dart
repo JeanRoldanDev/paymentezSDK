@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:paymentez/models/models.dart';
-import 'package:paymentez/src/paymentez.impl.dart';
-import 'package:paymentez/utils/utils.dart';
+import 'package:paymentez_sdk/models/models.dart';
+import 'package:paymentez_sdk/src/paymentez.impl.dart';
+import 'package:paymentez_sdk/utils/utils.dart';
 import 'package:test/test.dart';
 
 import '../helpers/helpers.dart';

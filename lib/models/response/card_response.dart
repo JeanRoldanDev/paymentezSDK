@@ -1,5 +1,5 @@
-import 'package:paymentez/models/response/card_register.dart';
-import 'package:paymentez/utils/dynamic_ext.dart';
+import 'package:paymentez_sdk/models/response/card_register.dart';
+import 'package:paymentez_sdk/utils/dynamic_ext.dart';
 
 class CardsResponse {
   CardsResponse({required this.cards, required this.resultSize});

@@ -1,5 +1,5 @@
-import 'package:paymentez/models/request/pay/installments.dart';
-import 'package:paymentez/models/request/pay/installments_type.dart';
+import 'package:paymentez_sdk/models/request/pay/installments.dart';
+import 'package:paymentez_sdk/models/request/pay/installments_type.dart';
 
 class OrderPay {
   OrderPay({

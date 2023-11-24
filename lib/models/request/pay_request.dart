@@ -1,6 +1,6 @@
-import 'package:paymentez/models/request/pay/card_token.dart';
-import 'package:paymentez/models/request/pay/order_pay.dart';
-import 'package:paymentez/models/request/pay/user_pay.dart';
+import 'package:paymentez_sdk/models/request/pay/card_token.dart';
+import 'package:paymentez_sdk/models/request/pay/order_pay.dart';
+import 'package:paymentez_sdk/models/request/pay/user_pay.dart';
 
 class PayRequest {
   PayRequest({

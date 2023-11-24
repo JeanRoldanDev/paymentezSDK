@@ -1,4 +1,4 @@
-import 'package:paymentez/models/models.dart';
+import 'package:paymentez_sdk/models/models.dart';
 
 abstract class IPaymentez {
   // Card
