@@ -1,4 +1,4 @@
-![Texto alternativo](./doc/paymentez.png)
+![paymentez](https://github.com/JeanRoldanDev/paymentezSDK/blob/44a602d70f1427c12eea13967c5085215178aa35/doc/paymentez.png) 
 Este SDK para [Paymentez](https://paymentez.github.io/api-doc/#introduction) 💳, desarrollado por la comunidad de [Flutter Ecuador](https://twitter.com/flutter_ec) 🇪🇨, **NO ES UNA SOLUCIÓN OFICIAL DE PAYMENTEZ**, pero surge como respuesta a la creciente demanda de integraciones robustas y eficientes en el ecosistema de pagos digitales. Identificamos una necesidad significativa entre las empresas y desarrolladores que enfrentan dificultades y dudas al intentar integrar servicios de Paymentez en sus aplicaciones Flutter.
 
 *PaymentezSDK* una solución estable, eficiente y fácil de implementar 😱. ofreciendo una experiencia de integración sin fisuras en aplicaciones Dart y Flutter. Con un enfoque en la estabilidad y cobertura de código completa, este SDK es ideal tanto para empresas 🏢 como para 🧑🏻‍💻desarrolladores👨🏻‍💻 independientes que buscan integrar las capacidades de pago avanzadas de Paymentez, evitando las complicaciones técnicas habituales 🙄.
