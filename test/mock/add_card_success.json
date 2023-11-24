@@ -1,0 +1,14 @@
+{
+    "card": {
+        "bin": "411111",
+        "status": "valid",
+        "token": "3133843303534038055",
+        "message": "Reverse by mock",
+        "expiry_year": "2025",
+        "expiry_month": "9",
+        "transaction_reference": "DF-473543",
+        "type": "vi",
+        "number": "1111",
+        "origin": "Paymentez"
+    }
+}

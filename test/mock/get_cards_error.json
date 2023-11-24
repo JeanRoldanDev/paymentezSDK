@@ -1,0 +1,7 @@
+{
+  "error": {
+      "type": "Invalid Token",
+      "help": "Valid token must be like: 229f19f7544c3e4ddf1b28873128670cad8526385957b5b48df7bb44814f5b3e",
+      "description": "{}"
+  }
+}

@@ -1,0 +1,60 @@
+{
+    "cards": [
+        {
+            "bin": "411111",
+            "status": "valid",
+            "token": "14461473346311663224",
+            "holder_name": "citlali calderon",
+            "expiry_year": "2025",
+            "expiry_month": "9",
+            "transaction_reference": null,
+            "type": "vi",
+            "number": "1111"
+        },
+        {
+            "bin": "364170",
+            "status": "valid",
+            "token": "2116864337563989690",
+            "holder_name": "Cristofer",
+            "expiry_year": "2025",
+            "expiry_month": "6",
+            "transaction_reference": "DF-423830",
+            "type": "di",
+            "number": "0808"
+        },
+        {
+            "bin": "222100",
+            "status": "valid",
+            "token": "17872721591103712817",
+            "holder_name": "Emily",
+            "expiry_year": "2028",
+            "expiry_month": "6",
+            "transaction_reference": null,
+            "type": "mc",
+            "number": "7736"
+        },
+        {
+            "bin": "400002",
+            "status": "valid",
+            "token": "12182664739346316488",
+            "holder_name": "Ramona",
+            "expiry_year": "2028",
+            "expiry_month": "5",
+            "transaction_reference": null,
+            "type": "vi",
+            "number": "5032"
+        },
+        {
+            "bin": "511915",
+            "status": "review",
+            "token": "5553094495674975924",
+            "holder_name": "Peter",
+            "expiry_year": "2024",
+            "expiry_month": "1",
+            "transaction_reference": "DF-422006",
+            "type": "mc",
+            "number": "7991"
+        }
+    ],
+    "result_size": 5
+}

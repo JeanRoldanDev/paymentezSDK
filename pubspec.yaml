@@ -1,23 +1,17 @@
 name: paymentez
 description: Paymentez SDK for Ecuador.
 version: 0.5.0
-author: Jean Roldan at Paymentez
 homepage: https://www.paymentez.com.ec/
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  http: 0.12.2
-  crypto: 2.1.5
-  dart_ipify: 1.0.2
-
+  crypto: 3.0.3
+  http: 1.1.0
+  
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  very_good_analysis:
+  mocktail: 1.0.1
+  test: ^1.19.2
+  very_good_analysis: 5.1.0
 
-flutter:
