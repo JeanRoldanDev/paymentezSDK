@@ -1,4 +1,4 @@
-import 'package:paymentez/paymentez_sdk.dart';
+import 'package:paymentez_sdk/paymentez_sdk.dart';
 import 'package:test/test.dart';
 
 void main() {

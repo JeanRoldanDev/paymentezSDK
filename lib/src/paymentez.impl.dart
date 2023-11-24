@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:paymentez/models/models.dart';
-import 'package:paymentez/src/paymentez.inteface.dart';
-import 'package:paymentez/utils/utils.dart';
+import 'package:paymentez_sdk/models/models.dart';
+import 'package:paymentez_sdk/src/paymentez.inteface.dart';
+import 'package:paymentez_sdk/utils/utils.dart';
 
 class PaymentezImpl implements IPaymentez {
   PaymentezImpl({

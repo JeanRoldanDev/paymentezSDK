@@ -1,4 +1,4 @@
-name: paymentez
+name: paymentez_sdk
 description: Paymentez SDK for Ecuador.
 version: 0.5.0
 homepage: https://www.paymentez.com.ec/
@@ -7,8 +7,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  crypto: 3.0.3
-  http: 1.1.0
+  crypto: ^3.0.3
+  http: ^1.1.0
   
 dev_dependencies:
   mocktail: 1.0.1

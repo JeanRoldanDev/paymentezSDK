@@ -1,4 +1,4 @@
-import 'package:paymentez/utils/utils.dart';
+import 'package:paymentez_sdk/utils/utils.dart';
 
 class PayResponse {
   PayResponse({
