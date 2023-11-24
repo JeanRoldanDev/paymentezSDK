@@ -7,12 +7,8 @@ abstract class IPaymentez {
   Future<(DeleteCardResponse?, PaymentezError?)> deleteCard({
     required DeleteCardRequest deleteCardRequest,
   });
+
   // Payment
   Future<(PayResponse?, PaymentezError?)> debit(PayRequest payRequest);
   Future<(PayResponse?, PaymentezError?)> debitCC(PayPCIRequest payPCIRequest);
-
-  // Transactional
-  // Future<void> verify();
-  // Future<void> refund();
-  // Future<void> transactionInfo();
 }
