@@ -35,7 +35,7 @@ final sdk = PaymentezSDK(
 );
 ```
 ### Ejemplos de Uso
-#### Add Card
+#### Guardar un Tarjeta
 Es una función típicamente utilizada en plataformas de procesamiento de pagos como Paymentez para agregar una tarjeta de crédito o débito en un baúl de protección donde se tokenizan las tarjetas agregadas para garantizar la seguridad y la privacidad de los datos, donde cada tarjeta agregada está vinculada a un usuario específico.
 ```dart
 final addCardRequest = AddCardRequest(
@@ -55,7 +55,18 @@ final addCardRequest = AddCardRequest(
 final (addCardResponse, paymentezError) = await sdk.addCard(addCardRequest);
 ```
 
+#### Eliminar Tarjeta:
+La eliminación de una tarjeta del baul de protección de Paymentez es un proceso seguro que garantiza que la información de la tarjeta se elimine completamente de la base de datos. Esto es crucial para mantener la seguridad de los datos del usuario y para darles control sobre sus métodos de pago almacenados. La función deleteCard es especialmente importante para gestionar tarjetas que han expirado, se han perdido o han sido reemplazadas.
+```dart
+
+```
+#### Listar Tarjetas guardafas:
+Esta lista incluye detalles relevantes como el tipo de tarjeta, los últimos cuatro dígitos, la fecha de vencimiento y el nombre del titular, proporcionando una manera clara y segura de visualizar y gestionar sus métodos de pago. Esta función es útil para que los usuarios revisen rápidamente sus tarjetas guardadas y seleccionen la más adecuada para sus transacciones.
+```dart
+
+```
 #### Pay with token card
+Esta función permite a los usuarios realizar compras utilizando una orden tokenizada. En este método, la información de la tarjeta del usuario ya ha sido previamente tokenizada y almacenada de forma segura. Al realizar una compra, el usuario simplemente referencia el token de su tarjeta almacenado, en lugar de ingresar los detalles de la tarjeta cada vez. Esto no solo agiliza el proceso de compra, sino que también mejora la seguridad, ya que los datos sensibles de la tarjeta no se transmiten durante la transacción. Es ideal para los usuarios que realizan compras recurrentes o quieren una experiencia de pago más rápida y segura.
 ```dart
 final model = PayRequest(
     user: UserPay(
@@ -81,6 +92,7 @@ final (payResponse, paymentezError) = await sdk.debit(model);
 
 
 #### Pay with card direct 
+Esta función permite a los usuarios realizar compras ingresando los detalles de su tarjeta de crédito o débito directamente en cada transacción. A diferencia de las órdenes tokenizadas, aquí se proporciona la información de la tarjeta en cada compra, lo que puede ser preferible para usuarios que no desean almacenar sus datos de tarjeta o para transacciones únicas. A pesar de requerir más pasos en cada compra, esta opción mantiene altos estándares de seguridad, incluyendo la validación de datos y posiblemente la autenticación 3D Secure, para proteger contra el fraude y el uso indebido de la tarjeta.
 ```dart
 final payPCIRequest = PayPCIRequest(
     user: UserPay(
