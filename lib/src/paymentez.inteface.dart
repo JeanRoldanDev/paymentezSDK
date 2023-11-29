@@ -4,11 +4,16 @@ abstract class IPaymentez {
   // Card
   Future<(CardsResponse?, PaymentezError?)> getAllCards(String userID);
   Future<(AddCardResponse?, PaymentezError?)> addCard(AddCardRequest newCard);
-  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard({
-    required DeleteCardRequest deleteCardRequest,
-  });
+  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard(
+    DeleteCardRequest deleteCardRequest,
+  );
 
   // Payment
   Future<(PayResponse?, PaymentezError?)> debit(PayRequest payRequest);
   Future<(PayResponse?, PaymentezError?)> debitCC(PayPCIRequest payPCIRequest);
+
+  // Proccess
+  Future<(RefundResponse?, PaymentezError?)> refund(
+    RefundRequest refundRequest,
+  );
 }

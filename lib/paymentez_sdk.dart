@@ -12,6 +12,7 @@ class PaymentezSDK implements IPaymentez {
     String clientApplicationCode = '',
     String clientAppKey = '',
     bool isProd = false,
+    bool isPCI = false,
   }) : _svc = PaymentezImpl(
           client: http.Client(),
           serverApplicationCode: serverApplicationCode,
@@ -19,6 +20,7 @@ class PaymentezSDK implements IPaymentez {
           clientAppKey: clientAppKey,
           clientApplicationCode: clientApplicationCode,
           isProd: isProd,
+          isPCI: isPCI,
         );
 
   final PaymentezImpl _svc;
@@ -32,10 +34,10 @@ class PaymentezSDK implements IPaymentez {
       _svc.addCard(newCard);
 
   @override
-  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard({
-    required DeleteCardRequest deleteCardRequest,
-  }) =>
-      _svc.deleteCard(deleteCardRequest: deleteCardRequest);
+  Future<(DeleteCardResponse?, PaymentezError?)> deleteCard(
+    DeleteCardRequest deleteCardRequest,
+  ) =>
+      _svc.deleteCard(deleteCardRequest);
 
   @override
   Future<(PayResponse?, PaymentezError?)> debit(PayRequest payRequest) =>
@@ -46,4 +48,10 @@ class PaymentezSDK implements IPaymentez {
     PayPCIRequest payPCIRequest,
   ) =>
       _svc.debitCC(payPCIRequest);
+
+  @override
+  Future<(RefundResponse?, PaymentezError?)> refund(
+    RefundRequest refundRequest,
+  ) =>
+      _svc.refund(refundRequest);
 }
