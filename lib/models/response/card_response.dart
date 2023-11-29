@@ -22,4 +22,11 @@ class CardsResponse {
 
   final List<CardRegister> cards;
   final int resultSize;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'cards': cards.map((e) => e.toJson()).toList(),
+      'result_size': resultSize,
+    };
+  }
 }

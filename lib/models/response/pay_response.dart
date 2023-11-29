@@ -23,31 +23,35 @@ class PayResponse {
 class CardResp {
   CardResp({
     required this.bin,
-    required this.status,
-    required this.token,
     required this.expiryYear,
     required this.expiryMonth,
     required this.transactionReference,
     required this.type,
     required this.number,
     required this.origin,
+    this.status,
+    this.token,
   });
 
-  factory CardResp.fromJson(Map<String, dynamic> json) => CardResp(
-        bin: json['bin'] as String,
-        status: json['status'] as String,
-        token: json['token'] as String,
-        expiryYear: json['expiry_year'] as String,
-        expiryMonth: json['expiry_month'] as String,
-        transactionReference: json['transaction_reference'] as String,
-        type: json['type'] as String,
-        number: json['number'] as String,
-        origin: json['origin'] as String,
-      );
+  factory CardResp.fromJson(Map<String, dynamic> json) {
+    final status = json['status'] == null ? null : json['status'] as String;
+    final token = json['token'] == null ? null : json['token'] as String;
+    return CardResp(
+      bin: json['bin'] as String,
+      status: status,
+      token: token,
+      expiryYear: json['expiry_year'] as String,
+      expiryMonth: json['expiry_month'] as String,
+      transactionReference: json['transaction_reference'] as String,
+      type: json['type'] as String,
+      number: json['number'] as String,
+      origin: json['origin'] as String,
+    );
+  }
 
   final String bin;
-  final String status;
-  final String token;
+  final String? status;
+  final String? token;
   final String expiryYear;
   final String expiryMonth;
   final String transactionReference;
@@ -57,8 +61,8 @@ class CardResp {
 
   Map<String, dynamic> toJson() => {
         'bin': bin,
-        'status': status,
-        'token': token,
+        if (status != null) 'status': status,
+        if (token != null) 'token': token,
         'expiry_year': expiryYear,
         'expiry_month': expiryMonth,
         'transaction_reference': transactionReference,
