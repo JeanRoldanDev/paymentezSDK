@@ -15,3 +15,10 @@
 - Add funtions getAllCards, addCard, deleteCard
 - Remove methods of payment for refactorization of code
 - Coverage of 53.9 %
+
+## [0.5.1] - FEAT: Refactor Code 
+- Change readme
+
+## [0.5.2] - FEAT: Refund
+- Add refund method
+- Refactor code
