@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:paymentez_sdk/paymentez_sdk.dart';
 
@@ -69,5 +68,4 @@ Future<void> main(List<String> args) async {
       log(deleteCardResponse!.toJson().toString());
     }
   }
-  exit(0);
 }
