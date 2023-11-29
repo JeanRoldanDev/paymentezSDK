@@ -112,7 +112,7 @@ class PaymentezImpl implements IPaymentez {
 
     final response = await client.post(
       url,
-      headers: _headers(),
+      headers: _headers(isServer: true),
       body: json.encode(payRequest.toJson()),
     );
 

@@ -14,6 +14,6 @@ abstract class IPaymentez {
 
   // Proccess
   Future<(RefundResponse?, PaymentezError?)> refund(
-    RefundRequest payPCIRequest,
+    RefundRequest refundRequest,
   );
 }

@@ -51,7 +51,7 @@ class PaymentezSDK implements IPaymentez {
 
   @override
   Future<(RefundResponse?, PaymentezError?)> refund(
-    RefundRequest payPCIRequest,
+    RefundRequest refundRequest,
   ) =>
-      _svc.refund(payPCIRequest);
+      _svc.refund(refundRequest);
 }
