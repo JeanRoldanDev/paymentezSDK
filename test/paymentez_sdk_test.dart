@@ -32,7 +32,7 @@ void main() {
 
   test('SDK instance test call getAllCards', () async {
     final (resp, err) = await sdk.deleteCard(
-      deleteCardRequest: DeleteCardRequest(
+      DeleteCardRequest(
         cardToken: 'mockData',
         userId: 'mockData',
       ),
