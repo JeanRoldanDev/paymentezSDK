@@ -19,6 +19,7 @@ class PaymentezImpl implements IPaymentez {
   final String serverApplicationCode;
   final String serverAppKey;
   final String clientApplicationCode;
+  @override
   final String clientAppKey;
   final bool isProd;
   final bool isPCI;
@@ -166,4 +167,10 @@ class PaymentezImpl implements IPaymentez {
 
     return (null, PaymentezError.fromJson(body));
   }
+
+  @override
+  String get clientAppCode => clientApplicationCode;
+
+  @override
+  String get environment => isProd ? 'prod' : 'stg';
 }
