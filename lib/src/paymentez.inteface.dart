@@ -16,4 +16,9 @@ abstract class IPaymentez {
   Future<(RefundResponse?, PaymentezError?)> refund(
     RefundRequest refundRequest,
   );
+
+  //Add card webview configuration
+  String get environment;
+  String get clientAppCode;
+  String get clientAppKey;
 }

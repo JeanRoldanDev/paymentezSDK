@@ -43,7 +43,7 @@ void main() {
             appCode: paymentez.serverApplicationCode,
             appKey: paymentez.serverAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(() => mockHttpClient.get(mockURI, headers: headerMock)).thenAnswer(
@@ -74,7 +74,7 @@ void main() {
             appCode: paymentez.serverApplicationCode,
             appKey: paymentez.serverAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(() => mockHttpClient.get(mockURI, headers: headerMock)).thenAnswer(
@@ -118,7 +118,7 @@ void main() {
             appCode: paymentez.clientApplicationCode,
             appKey: paymentez.clientAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(
@@ -165,7 +165,7 @@ void main() {
             appCode: paymentez.clientApplicationCode,
             appKey: paymentez.clientAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(
@@ -209,7 +209,7 @@ void main() {
             appCode: paymentez.serverApplicationCode,
             appKey: paymentez.serverAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(
@@ -226,7 +226,7 @@ void main() {
         );
 
         final (result, err) = await paymentez.deleteCard(
-          deleteCardRequest: modelRequest,
+          modelRequest,
         );
 
         expect(err, isNull);
@@ -252,7 +252,7 @@ void main() {
             appCode: paymentez.serverApplicationCode,
             appKey: paymentez.serverAppKey,
           ),
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         when(
@@ -269,7 +269,7 @@ void main() {
         );
 
         final (result, err) = await paymentez.deleteCard(
-          deleteCardRequest: modelRequest,
+          modelRequest,
         );
 
         expect(result, isNull);
