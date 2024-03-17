@@ -1,4 +1,13 @@
+// ignore_for_file: avoid_print, use_colored_box
+
+import 'dart:developer';
+
+import 'package:app_example/page_inappwebview.dart';
+import 'package:app_example/page_webview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:paymentez_sdk/models/request/card/user_card.dart';
+import 'package:paymentez_sdk/paymentez_sdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +39,91 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+enum WebViewClient { inAppWebView, webView }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+class _MyHomePageState extends State<MyHomePage> {
+  final typePluging = WebViewClient.inAppWebView;
+  final urlView = ValueNotifier<String>('');
+  InAppWebViewController? ctrl;
+
+  final sdk = PaymentezSDK(
+    serverApplicationCode: 'test',
+    serverAppKey: 'test',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _incrementCounter() async {
+    final (resp, error) = await sdk
+        .addCard(CardRequest(user: UserCard(id: '1231', email: 'adfadfasd')));
+    if (error != null) {
+      return;
+    }
+
+    if (resp!.tokenizeURL != null) {
+      urlView.value = resp.tokenizeURL!;
+      // await ctrl?.loadUrl(
+      //   urlRequest: URLRequest(
+      //     url: WebUri(
+      //       resp.tokenizeURL!,
+      //     ),
+      //   ),
+      // );
+    }
+  }
+
+  Future<dynamic> newEvaluateJavascript({
+    required String source,
+    ContentWorld? contentWorld,
+  }) async {}
+
+  void enviar() {
+    const javascript = '''
+        let message = { type: "tokenize", data: null };
+        window.postMessage(message, "https://ccapi-stg.paymentez.com");
+      ''';
+
+    // Ejecuta el JavaScript en el WebView
+    ctrl!.evaluateJavascript(source: javascript);
+  }
+
+  Future<void> hola() async {
+    if (ctrl != null) {
+      const yourCode = '''
+       window.addEventListener("message", (event) => {
+        console.log("nueveo mensaje desde dart");
+        console.log(event);
+        if (event.origin !== "https://ccapi-stg.paymentez.com") {
+          return
+        }
+
+        const msg = event.data;
+        console.log(msg.data);
+        switch (msg.type) {
+          case "incomplete_form":
+            console.warn("incomplete_form");
+            window.flutter_inappwebview.callHandler('getDataFromWebView', { key: 'value' }).then(function(result) {
+              console.log("Resultado de Flutter: " + result);
+            });
+            break;
+          case "tokenize_response":
+            console.warn("tokenize_response");
+            break;
+        }
+      });
+        ''';
+      await ctrl!.evaluateJavascript(source: yourCode);
+
+      ctrl!.addJavaScriptHandler(
+        handlerName: 'getDataFromWebView',
+        callback: (dat) {
+          print('LLEGO ALGO: $dat');
+        },
+      );
+    }
   }
 
   @override
@@ -46,24 +133,62 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: ValueListenableBuilder<String>(
+        valueListenable: urlView,
+        builder: (_, value, __) {
+          log('RELOAD');
+          return typePluging == WebViewClient.webView
+              ? PageWebView(url: value)
+              : PageInappWebview(url: value);
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+
+      // body: InAppWebView(
+      //   onConsoleMessage: (ctrler, consoleMessage) {
+      //     log(consoleMessage.message);
+      //     // print('=========RECIVE CONSOLE');
+      //     // print(ctrler);
+      //     // print(consoleMessage.message);
+      //     // print(consoleMessage.toJson());
+      //     // print(consoleMessage.toMap());
+      //     // print(consoleMessage);
+      //   },
+      //   initialUrlRequest: URLRequest(
+      //     url: WebUri(''),
+      //   ),
+      //   onWebViewCreated: (controller) async {
+      //     print('onWebViewCreated');
+      //     ctrl = controller;
+      //   },
+      //   onLoadStart: (controller, url) async {
+      //     // print('onLoadStart');
+      //   },
+      //   onProgressChanged: (controller, progress) {
+      //     // print('progress $progress');
+      //   },
+      // ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          FloatingActionButton(
+            onPressed: hola,
+            tooltip: 'Increment',
+            child: const Icon(Icons.voice_chat),
+          ),
+          FloatingActionButton(
+            onPressed: enviar,
+            tooltip: 'Increment',
+            child: const Icon(Icons.message),
+          ),
+        ],
       ),
     );
   }
