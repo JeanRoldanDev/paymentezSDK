@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_print, use_colored_box
 
-import 'dart:developer';
-
 import 'package:app_example/page_inappwebview.dart';
-import 'package:app_example/page_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:paymentez_sdk/models/request/card/user_card.dart';
+import 'package:paymentez_sdk/paymentez_controller.dart';
 import 'package:paymentez_sdk/paymentez_sdk.dart';
 
 void main() {
@@ -43,13 +41,10 @@ enum WebViewClient { inAppWebView, webView }
 
 class _MyHomePageState extends State<MyHomePage> {
   final typePluging = WebViewClient.inAppWebView;
-  final urlView = ValueNotifier<String>('');
+  String urlView = '';
   InAppWebViewController? ctrl;
 
-  final sdk = PaymentezSDK(
-    serverApplicationCode: 'test',
-    serverAppKey: 'test',
-  );
+  final sdk = PaymentezSDK();
 
   @override
   void initState() {
@@ -64,7 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     if (resp!.tokenizeURL != null) {
-      urlView.value = resp.tokenizeURL!;
+      setState(() {
+        urlView = resp.tokenizeURL!;
+      });
       // await ctrl?.loadUrl(
       //   urlRequest: URLRequest(
       //     url: WebUri(
@@ -126,6 +123,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  final paymentezCtrl = PaymentezController(isProd: false);
+  void test() {
+    paymentezCtrl.onSave();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,16 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: ValueListenableBuilder<String>(
-        valueListenable: urlView,
-        builder: (_, value, __) {
-          log('RELOAD');
-          return typePluging == WebViewClient.webView
-              ? PageWebView(url: value)
-              : PageInappWebview(url: value);
-        },
+      body: PageInappWebview(
+        url: urlView,
+        paymentezCtrl: paymentezCtrl,
       ),
-
       // body: InAppWebView(
       //   onConsoleMessage: (ctrler, consoleMessage) {
       //     log(consoleMessage.message);
@@ -185,6 +181,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           FloatingActionButton(
             onPressed: enviar,
+            tooltip: 'Increment',
+            child: const Icon(Icons.message),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          FloatingActionButton(
+            onPressed: test,
             tooltip: 'Increment',
             child: const Icon(Icons.message),
           ),
