@@ -1,5 +1,7 @@
-class AddCardRequest {
-  AddCardRequest({
+import 'package:paymentez_sdk/models/request/card/user_card.dart';
+
+class CardPCIRequest {
+  CardPCIRequest({
     required this.user,
     required this.card,
   });
@@ -34,20 +36,5 @@ class NewCard {
         'expiry_month': expiryMonth,
         'expiry_year': expiryYear,
         'cvc': cvc,
-      };
-}
-
-class UserCard {
-  UserCard({
-    required this.id,
-    required this.email,
-  });
-
-  String id;
-  String email;
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
       };
 }
