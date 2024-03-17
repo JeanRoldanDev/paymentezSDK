@@ -26,6 +26,7 @@ class _PageWebViewState extends State<PageWebView> {
   @override
   Widget build(BuildContext context) {
     return WebViewWidget(
+      key: Key('${widget.url}${DateTime.now().millisecondsSinceEpoch}'),
       controller: _ctrl,
     );
   }
