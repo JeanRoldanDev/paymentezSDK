@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, use_colored_box
 
+import 'package:app_example/enviroment.dart';
 import 'package:app_example/page_inappwebview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -44,7 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
   String urlView = '';
   InAppWebViewController? ctrl;
 
-  final sdk = PaymentezSDK();
+  final sdk = PaymentezSDK(
+    clientApplicationCode: Environment.clientAppCode,
+    clientAppKey: Environment.clientAppKey,
+    serverAppKey: Environment.clientAppKey,
+    serverApplicationCode: Environment.clientAppCode,
+  );
 
   @override
   void initState() {
