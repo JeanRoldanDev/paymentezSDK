@@ -3,5 +3,6 @@ linter:
   rules:
     public_member_api_docs: false
     prefer_constructors_over_static_methods: false
+    sort_pub_dependencies: false
 
 
