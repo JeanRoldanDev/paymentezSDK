@@ -1,15 +1,9 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:http/http.dart' as http;
 import 'package:paymentez_sdk/models/models.dart';
 import 'package:paymentez_sdk/src/paymentez.impl.dart';
 import 'package:paymentez_sdk/src/paymentez.inteface.dart';
 
 export 'models/models.dart';
-
-final InAppLocalhostServer localhostServer = InAppLocalhostServer(
-  documentRoot: 'assets/paymentez_forms',
-  directoryIndex: 'add_card_form.html',
-);
 
 class PaymentezSDK implements IPaymentez {
   PaymentezSDK({
@@ -36,8 +30,12 @@ class PaymentezSDK implements IPaymentez {
       _svc.getAllCards(userID);
 
   @override
-  Future<(AddCardResponse?, PaymentezError?)> addCard(AddCardRequest newCard) =>
+  Future<(AddCardResponse?, PaymentezError?)> addCard(CardRequest newCard) =>
       _svc.addCard(newCard);
+
+  @override
+  Future<(AddCardResponse?, PaymentezError?)> addCardCC(CardPCIRequest card) =>
+      _svc.addCardCC(card);
 
   @override
   Future<(DeleteCardResponse?, PaymentezError?)> deleteCard(
@@ -60,13 +58,4 @@ class PaymentezSDK implements IPaymentez {
     RefundRequest refundRequest,
   ) =>
       _svc.refund(refundRequest);
-
-  @override
-  String get clientAppCode => _svc.clientApplicationCode;
-
-  @override
-  String get environment => _svc.isProd ? 'prod' : 'stg';
-
-  @override
-  String get clientAppKey => _svc.clientAppKey;
 }

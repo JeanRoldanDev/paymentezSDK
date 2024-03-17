@@ -8,9 +8,12 @@ class PaymentezSecurity {
   static String getAuthToken({
     required String appCode,
     required String appKey,
+    int? unixtime,
   }) {
-    final authTimeStamp =
-        (DateTime.now().millisecondsSinceEpoch / 1000).floor();
+    var authTimeStamp = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
+    if (unixtime != null) {
+      authTimeStamp = unixtime;
+    }
     final uniqTokenString = '$appKey$authTimeStamp';
     final uniqToken = sha256.convert(utf8.encode(uniqTokenString)).toString();
     final stringAuthToken = '$appCode;$authTimeStamp;$uniqToken';
