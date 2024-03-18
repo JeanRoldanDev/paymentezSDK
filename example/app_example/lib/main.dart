@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, use_colored_box
 
+import 'package:app_example/enviroment.dart';
 import 'package:app_example/page_inappwebview.dart';
 import 'package:app_example/page_webview.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> initForm() async {
     final sdk = PaymentezSDK(
-      serverApplicationCode: 'TEST',
-      serverAppKey: 'TEST',
+      clientApplicationCode: Environment.clientAppCode,
+      clientAppKey: Environment.clientAppKey,
+      serverAppKey: Environment.clientAppKey,
+      serverApplicationCode: Environment.clientAppCode,
     );
 
     final (resp, error) = await sdk
