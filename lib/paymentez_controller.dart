@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: avoid_dynamic_calls, lines_longer_than_80_chars
 
 import 'dart:async';
 import 'dart:developer';
@@ -25,6 +25,9 @@ class PaymentezController {
       case 'InAppWebViewController':
         _ctrl = ctrl;
         _typePlugin = _TypePlugin.inappwebview;
+      case 'WebViewController':
+        _ctrl = ctrl;
+        _typePlugin = _TypePlugin.webView;
       default:
         return;
     }
@@ -33,8 +36,8 @@ class PaymentezController {
   void onInit() {
     switch (_typePlugin) {
       case _TypePlugin.inappwebview:
+        log('SDK_PAYMENTEZ:  EMISOR OF Inappwebview');
         if (_existEvaluateJavascript) {
-          log('SDK_PAYMENTEZ: ON LISTENER RESULT');
           _ctrl.evaluateJavascript(source: _utils.onListenerResultSaveCard);
         }
 
@@ -47,7 +50,19 @@ class PaymentezController {
           );
         }
       case _TypePlugin.webView:
-        break;
+        if (_existRunJavaScript) {
+          _ctrl.runJavaScript(_utils.onListenerResultSaveCard);
+        }
+
+        if (_existAddJavaScriptChannel) {
+          _ctrl.addJavaScriptChannel(
+            'SendDataSDK',
+            onMessageReceived: (dynamic dat) {
+              final data = dat.message as String;
+              print('LLEGO ALGO DESDE JS 22: $data');
+            },
+          );
+        }
       case _TypePlugin.none:
         return;
     }
@@ -61,7 +76,10 @@ class PaymentezController {
           _ctrl.evaluateJavascript(source: _utils.onCallbackSaveCard);
         }
       case _TypePlugin.webView:
-        break;
+        if (_existRunJavaScript) {
+          log('SDK_PAYMENTEZ: ON SAVE CARD');
+          _ctrl.runJavaScript(_utils.onCallbackSaveCard);
+        }
       case _TypePlugin.none:
         return;
     }
@@ -74,13 +92,11 @@ class PaymentezController {
   // ==================================================================
   // =====================  PRIVATE FUNCTION   ========================
   // ==================================================================
-
   bool get _existEvaluateJavascript {
     if (_ctrl == null) return false;
     try {
       final status = _ctrl.evaluateJavascript.runtimeType.toString();
       const key =
-          // ignore: lines_longer_than_80_chars
           '({required String source, ContentWorld? contentWorld}) => Future<dynamic>';
 
       return status == key;
@@ -94,9 +110,31 @@ class PaymentezController {
     try {
       final status = _ctrl.addJavaScriptHandler.runtimeType.toString();
       const key =
-          // ignore: lines_longer_than_80_chars
           '({required String handlerName, required (List<dynamic>) => dynamic callback}) => void';
 
+      return status == key;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool get _existRunJavaScript {
+    if (_ctrl == null) return false;
+    try {
+      final status = _ctrl.runJavaScript.runtimeType.toString();
+      const key = '(String) => Future<void>';
+      return status == key;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool get _existAddJavaScriptChannel {
+    if (_ctrl == null) return false;
+    try {
+      final status = _ctrl.addJavaScriptChannel.runtimeType.toString();
+      const key =
+          '(String, {required (JavaScriptMessage) => void onMessageReceived}) => Future<void>';
       return status == key;
     } catch (e) {
       return false;
