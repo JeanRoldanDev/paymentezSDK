@@ -41,8 +41,6 @@ class _PageWebViewState extends State<PageWebView> {
     super.initState();
   }
 
-  //  _ctrl.runJavaScript(widget.paymentezCtrl.utils.onCallbackSaveCard);
-
   @override
   Widget build(BuildContext context) {
     if (widget.url.isNotEmpty) {
