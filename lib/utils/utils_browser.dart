@@ -32,19 +32,14 @@ class UtilsBrowser {
             };
 
             if (window.flutter_inappwebview !== undefined) {
-              window.flutter_inappwebview
-                .callHandler("SendDataSDK", dataErr)
-                .then(function (result) {
-                  console.log(
-                    "SDK_PAYMENTEZ: Data successfully sent to the SDK =>" +
-                      result
-                  );
-                })
-                .catch(function (error) {
-                  console.log(
-                    "SDK_PAYMENTEZ: Error getting data from WebView => " + error
-                  );
-                });
+              window.flutter_inappwebview.callHandler(
+                "SendDataSDK", 
+                JSON.stringify(dataErr)
+              );
+            }
+
+            if (SendDataSDK !== undefined) {
+              SendDataSDK.postMessage(JSON.stringify(dataErr));
             }
             break;
           case "tokenize_response":
@@ -59,19 +54,14 @@ class UtilsBrowser {
             };
 
             if (window.flutter_inappwebview !== undefined) {
-              window.flutter_inappwebview
-                .callHandler("SendDataSDK", data)
-                .then(function (result) {
-                  console.log(
-                    "SDK_PAYMENTEZ: Data successfully sent to the SDK =>" +
-                      result
-                  );
-                })
-                .catch(function (error) {
-                  console.log(
-                    "SDK_PAYMENTEZ: Error getting data from WebView => " + error
-                  );
-                });
+              window.flutter_inappwebview.callHandler(
+                "SendDataSDK", 
+                JSON.stringify(data)
+              );
+            }
+
+            if (SendDataSDK !== undefined) {
+              SendDataSDK.postMessage(JSON.stringify(data));
             }
             break;
         }
