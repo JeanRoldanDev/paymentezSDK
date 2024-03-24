@@ -50,10 +50,15 @@ class _PageWebViewState extends State<PageWebView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: WebViewWidget(
-        controller: _ctrl,
-      ),
+    return Column(
+      children: [
+        const Text('Package webview_flutter'),
+        Expanded(
+          child: WebViewWidget(
+            controller: _ctrl,
+          ),
+        ),
+      ],
     );
   }
 }

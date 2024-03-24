@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:paymentez_sdk/paymentez_controller.dart';
 
@@ -44,16 +45,21 @@ class _PageInappWebviewState extends State<PageInappWebview> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: InAppWebView(
-        onWebViewCreated: _onWebViewCreated,
-        onLoadStop: (controller, url) {
-          widget.paymentezCtrl.finishLoadPage();
-        },
-        onConsoleMessage: (ctrler, msg) {
-          log('MESSAGE CONSOLE: ${msg.message}');
-        },
-      ),
+    return Column(
+      children: [
+        const Text('Package flutter_inappwebview'),
+        Expanded(
+          child: InAppWebView(
+            onWebViewCreated: _onWebViewCreated,
+            onLoadStop: (controller, url) {
+              widget.paymentezCtrl.finishLoadPage();
+            },
+            onConsoleMessage: (ctrler, msg) {
+              log('MESSAGE CONSOLE: ${msg.message}');
+            },
+          ),
+        ),
+      ],
     );
   }
 }
