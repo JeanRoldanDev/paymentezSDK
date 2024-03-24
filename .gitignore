@@ -6,3 +6,5 @@ pubspec.lock
 
 /coverage
 .vscode/*
+
+*.DS_Store
