@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls, lines_longer_than_80_chars
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:paymentez_sdk/models/models.dart';
@@ -8,15 +9,51 @@ import 'package:paymentez_sdk/utils/utils_browser.dart';
 
 enum _TypePlugin { webView, inappwebview, none }
 
+class FormCardResponse {
+  FormCardResponse({
+    required this.type,
+    required this.message,
+    this.data,
+  });
+
+  factory FormCardResponse.fromJson(Map<String, dynamic> json) {
+    return FormCardResponse(
+      type: json['type'] as String,
+      message: json['message'] as String,
+    );
+  }
+
+  final String type;
+  final String message;
+  final CardRegister? data;
+}
+
 class PaymentezController {
   PaymentezController({required bool isProd})
       : _utils = UtilsBrowser(isProd: isProd);
 
   final UtilsBrowser _utils;
-  final _streamCtrl = StreamController<(AddCardResponse?, PaymentezError?)>();
+  final _streamCtrl = StreamController<FormCardResponse>();
 
   _TypePlugin _typePlugin = _TypePlugin.none;
   dynamic _ctrl;
+
+  void _onMessageReceived(dynamic dat) {
+    log('SDK_PAYMENTEZ: MESSGAGE RECEIVED $dat');
+    switch (_typePlugin) {
+      case _TypePlugin.inappwebview:
+        final data = dat as List<dynamic>;
+        final mapData =
+            json.decode(data.first.toString()) as Map<String, dynamic>;
+        _streamCtrl.add(FormCardResponse.fromJson(mapData));
+      case _TypePlugin.webView:
+        final data = dat.message as String;
+        final mapData = json.decode(data) as Map<String, dynamic>;
+        _streamCtrl.add(FormCardResponse.fromJson(mapData));
+      case _TypePlugin.none:
+        break;
+    }
+  }
 
   void setController(dynamic ctrl) {
     log('SDK_PAYMENTEZ: SET CONTROLLER => $ctrl');
@@ -25,43 +62,41 @@ class PaymentezController {
       case 'InAppWebViewController':
         _ctrl = ctrl;
         _typePlugin = _TypePlugin.inappwebview;
+        if (_existAddJavaScriptHandler) {
+          _ctrl.addJavaScriptHandler(
+            handlerName: 'SendDataSDK',
+            callback: (dynamic data) {
+              _onMessageReceived(data);
+            },
+          );
+        }
       case 'WebViewController':
         _ctrl = ctrl;
         _typePlugin = _TypePlugin.webView;
+        if (_existAddJavaScriptChannel) {
+          _ctrl.addJavaScriptChannel(
+            'SendDataSDK',
+            onMessageReceived: (dynamic data) {
+              _onMessageReceived(data);
+            },
+          );
+        }
       default:
         return;
     }
   }
 
-  void onInit() {
+  void finishLoadPage() {
     switch (_typePlugin) {
       case _TypePlugin.inappwebview:
-        log('SDK_PAYMENTEZ:  EMISOR OF Inappwebview');
+        log('SDK_PAYMENTEZ: FINISH LOADING PAGE USE INAPPWEBVIEW');
         if (_existEvaluateJavascript) {
           _ctrl.evaluateJavascript(source: _utils.onListenerResultSaveCard);
         }
-
-        if (_existAddJavaScriptHandler) {
-          _ctrl.addJavaScriptHandler(
-            handlerName: 'SendDataSDK',
-            callback: (dynamic dat) {
-              print('LLEGO ALGO DESDE JS: $dat');
-            },
-          );
-        }
       case _TypePlugin.webView:
+        log('SDK_PAYMENTEZ: FINISH LOADING PAGE USE WEBVIEW');
         if (_existRunJavaScript) {
           _ctrl.runJavaScript(_utils.onListenerResultSaveCard);
-        }
-
-        if (_existAddJavaScriptChannel) {
-          _ctrl.addJavaScriptChannel(
-            'SendDataSDK',
-            onMessageReceived: (dynamic dat) {
-              final data = dat.message as String;
-              print('LLEGO ALGO DESDE JS 22: $data');
-            },
-          );
         }
       case _TypePlugin.none:
         return;
@@ -72,12 +107,12 @@ class PaymentezController {
     switch (_typePlugin) {
       case _TypePlugin.inappwebview:
         if (_existEvaluateJavascript) {
-          log('SDK_PAYMENTEZ: ON SAVE CARD');
+          log('SDK_PAYMENTEZ: ON SAVE CARD USE INAPPWEBVIEW');
           _ctrl.evaluateJavascript(source: _utils.onCallbackSaveCard);
         }
       case _TypePlugin.webView:
         if (_existRunJavaScript) {
-          log('SDK_PAYMENTEZ: ON SAVE CARD');
+          log('SDK_PAYMENTEZ: ON SAVE CARD USE WEBVIEW');
           _ctrl.runJavaScript(_utils.onCallbackSaveCard);
         }
       case _TypePlugin.none:
@@ -85,7 +120,7 @@ class PaymentezController {
     }
   }
 
-  Stream<(AddCardResponse?, PaymentezError?)> onResult() {
+  Stream<FormCardResponse> onResult() {
     return _streamCtrl.stream;
   }
 

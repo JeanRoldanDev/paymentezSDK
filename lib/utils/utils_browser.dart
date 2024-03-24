@@ -23,7 +23,7 @@ class UtilsBrowser {
         const msg = event.data;
         switch (msg.type) {
           case "incomplete_form":
-            console.log("SDK_PAYMENTEZ: incomplete_form " + msg.data);
+            console.log("SDK_PAYMENTEZ_JS: incomplete_form " + msg.data);
 
             const dataErr = {
               type: "incomplete_form",
@@ -44,7 +44,7 @@ class UtilsBrowser {
             break;
           case "tokenize_response":
             console.log(
-              "SDK_PAYMENTEZ: tokenize_response " + JSON.stringify(msg.data)
+              "SDK_PAYMENTEZ_JS: tokenize_response " + JSON.stringify(msg.data)
             );
 
             const data = {
