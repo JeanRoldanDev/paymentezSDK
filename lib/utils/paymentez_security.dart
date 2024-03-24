@@ -20,4 +20,15 @@ class PaymentezSecurity {
     final authToken = base64Encode(utf8.encode(stringAuthToken));
     return authToken;
   }
+
+  static String getSessionId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replaceAllMapped(
+      RegExp('[xy]'),
+      (match) {
+        final r = DateTime.now().microsecondsSinceEpoch & 0xf;
+        final v = match.group(0) == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toRadixString(16);
+      },
+    );
+  }
 }

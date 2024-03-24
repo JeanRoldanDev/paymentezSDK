@@ -3,9 +3,13 @@ import 'package:paymentez_sdk/models/request/card/user_card.dart';
 class CardRequest {
   CardRequest({
     required this.user,
+    required this.locale,
+    required this.requireBillingAddress,
   });
 
-  UserCard user;
+  final UserCard user;
+  final String locale;
+  final bool requireBillingAddress;
 
   Map<String, dynamic> toJson() => {
         'user': user.toJson(),
