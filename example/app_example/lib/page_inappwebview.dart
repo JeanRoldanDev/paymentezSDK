@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:paymentez_sdk/paymentez_controller.dart';
@@ -24,25 +26,32 @@ class _PageInappWebviewState extends State<PageInappWebview> {
     widget.paymentezCtrl.setController(ctrl);
   }
 
-  void _onLoadFinish(InAppWebViewController controller, WebUri? uri) {
+  void _setController() {
     if (widget.url.isNotEmpty) {
-      widget.paymentezCtrl.onInit();
+      ctrl!.loadUrl(
+        urlRequest: URLRequest(
+          url: WebUri(widget.url),
+        ),
+      );
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant PageInappWebview oldWidget) {
+    _setController();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: InAppWebView(
-        key: Key('${widget.url}${DateTime.now().millisecondsSinceEpoch}'),
-        initialUrlRequest: URLRequest(
-          url: WebUri(widget.url),
-        ),
         onWebViewCreated: _onWebViewCreated,
-        onLoadStop: _onLoadFinish,
-        onConsoleMessage: (ctrler, consoleMessage) {
-          print('CONSOLE ==>');
-          print(consoleMessage.message);
+        onLoadStop: (controller, url) {
+          widget.paymentezCtrl.finishLoadPage();
+        },
+        onConsoleMessage: (ctrler, msg) {
+          log('MESSAGE CONSOLE: ${msg.message}');
         },
       ),
     );
