@@ -1,9 +1,11 @@
-// ignore_for_file: avoid_print, use_colored_box
+import 'dart:async';
+import 'dart:developer';
 
-import 'package:app_example/enviroment.dart';
 import 'package:app_example/page_inappwebview.dart';
 import 'package:app_example/page_webview.dart';
+import 'package:app_example/radio_group.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:paymentez_sdk/models/request/card/user_card.dart';
 import 'package:paymentez_sdk/paymentez_controller.dart';
 import 'package:paymentez_sdk/paymentez_sdk.dart';
@@ -18,21 +20,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Color(0xff028d64),
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'PaymentezSDK Example',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff028d64)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({required this.title, super.key});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -41,21 +49,37 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _paymentezCtrl = PaymentezController(isProd: false);
 
+  int _typeBrowserPluging = 1;
   String urlView = '';
-  final type = false;
 
-  Future<void> initForm() async {
+  @override
+  void initState() {
+    _paymentezCtrl.onResult().listen((event) {
+      log('NEW EVENT SDK: $event');
+    });
+    super.initState();
+  }
+
+  String getIdUser() {
+    final currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
+    final currentTimeInSeconds = (currentTimeMillis / 1000).floor();
+    return currentTimeInSeconds.toString();
+  }
+
+  Future<void> initFormAddCard() async {
     final sdk = PaymentezSDK(
-      clientApplicationCode: Environment.clientAppCode,
-      clientAppKey: Environment.clientAppKey,
-      serverAppKey: Environment.clientAppKey,
-      serverApplicationCode: Environment.clientAppCode,
+      serverApplicationCode: 'TEST',
+      serverAppKey: 'TEST',
     );
 
-    final (resp, error) = await sdk
-        .addCard(CardRequest(user: UserCard(id: '1231', email: 'adfadfasd')));
+    final (resp, error) = await sdk.addCard(
+      CardRequest(
+        user: UserCard(id: getIdUser(), email: 'jhon@doe.com'),
+        locale: 'es',
+        requireBillingAddress: false,
+      ),
+    );
     if (error != null) {
-      print('ERROR CALL SERVICES');
       return;
     }
 
@@ -73,26 +97,43 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: type
-          ? PageWebView(
-              url: urlView,
-              paymentezCtrl: _paymentezCtrl,
-            )
-          : PageInappWebview(
-              url: urlView,
-              paymentezCtrl: _paymentezCtrl,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: kToolbarHeight / 2),
+            child: Image.asset(
+              'assets/banner.png',
+              height: 80,
             ),
+          ),
+          RadioGroup(
+            onChanged: (value) {
+              setState(() {
+                _typeBrowserPluging = value;
+              });
+            },
+          ),
+          Expanded(
+            child: _typeBrowserPluging == 1
+                ? PageInappWebview(
+                    url: urlView,
+                    paymentezCtrl: _paymentezCtrl,
+                  )
+                : PageWebView(
+                    url: urlView,
+                    paymentezCtrl: _paymentezCtrl,
+                  ),
+          ),
+        ],
+      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FloatingActionButton(
-            onPressed: initForm,
-            tooltip: 'IniForm',
-            child: const Icon(Icons.add),
+            onPressed: initFormAddCard,
+            tooltip: 'IniFormAddCard',
+            backgroundColor: const Color(0xff028d64),
+            child: const Icon(Icons.auto_fix_high_rounded),
           ),
           const SizedBox(
             width: 40,
@@ -100,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
           FloatingActionButton(
             onPressed: onSave,
             tooltip: 'OnSave',
+            backgroundColor: const Color(0xff028d64),
             child: const Icon(Icons.save),
           ),
         ],
