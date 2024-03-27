@@ -9,25 +9,6 @@ import 'package:paymentez_sdk/utils/utils_browser.dart';
 
 enum _TypePlugin { webView, inappwebview, none }
 
-class FormCardResponse {
-  FormCardResponse({
-    required this.type,
-    required this.message,
-    this.data,
-  });
-
-  factory FormCardResponse.fromJson(Map<String, dynamic> json) {
-    return FormCardResponse(
-      type: json['type'] as String,
-      message: json['message'] as String,
-    );
-  }
-
-  final String type;
-  final String message;
-  final CardRegister? data;
-}
-
 class PaymentezController {
   PaymentezController({required bool isProd})
       : _utils = UtilsBrowser(isProd: isProd);
