@@ -25,7 +25,7 @@ class _PageWebViewState extends State<PageWebView> with WidgetsBindingObserver {
     if (widget.url.isNotEmpty) {
       _ctrl = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(Colors.blue)
+        ..setBackgroundColor(const Color(0xfff5f5f7))
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageFinished: (url) {
